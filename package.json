@@ -1,0 +1,14 @@
+{
+  "name": "board-game-bot",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "bot": "ts-node main.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
+  }
+}
