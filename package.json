@@ -8,6 +8,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^13.7.4",
+    "discord.js": "^11.5.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.2"
   }
