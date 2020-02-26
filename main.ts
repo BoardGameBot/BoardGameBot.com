@@ -1,20 +1,22 @@
-import * as Discord from 'discord.js';
+import { botSingleton, client } from './state';
+import handlers from './handlers';
 
-const client = new Discord.Client();
-const token = process.env.DISCORD_TOKEN;
-if (!token) {
-  throw new Error('No token found!!');
-} else {
-  console.log('Using token: '+ token);
+function start() {
+  const token = process.env.DISCORD_TOKEN;
+  if (!token) {
+    throw new Error('No token found!!');
+  } else {
+    console.log('Using token: "' + token + '"');
+  }
+  client.login(token);
 }
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-});
-
-client.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('Pong!');
+  for (const handler of handlers) {
+    handler.init();
+    console.log(`Initialized ${handler.name} handler.`);
   }
 });
 
-client.login(token);
+start();
