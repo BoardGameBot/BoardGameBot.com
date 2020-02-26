@@ -1,17 +1,16 @@
 import { BotHandler } from './index';
 import { botSingleton, client } from '../state';
 import { Message } from 'discord.js';
+import { mentionedBotAndCommand, authorizeAdminOnly } from '../util';
 
-export default class InstallHandler implements BotHandler {
-    name = "Install";
+export default class EnableHandler implements BotHandler {
+    name = "Enable";
     init() {
         client.on('message', msg => {
-            if (msg.isMentioned(client.user) && msg.content.toLowerCase().includes('.enable')) {
-                if (msg.member.hasPermission('KICK_MEMBERS', true, true)) {
+            if (mentionedBotAndCommand(msg, 'enable')) {
+                authorizeAdminOnly(msg, () => {
                     this.enable(msg);
-                } else {
-                    msg.reply('Sorry, you need to be a server admin/owner to do that.');
-                }
+                });
             }
         });
     };
@@ -23,8 +22,8 @@ export default class InstallHandler implements BotHandler {
             botSingleton.channels[msg.channel.id] = channel;
         }
         if (!channel.enabled) {
-            botSingleton.channels[msg.channel.id] = { enabled: true };
-            msg.reply('I am now enabled for this channel. Use ".help" to see all available commands.');
+            botSingleton.channels[msg.channel.id].enabled = true;
+            msg.reply('Done. I am now enabled for this channel. Use ".help" to see all available commands.');
         } else {
             msg.reply('I am already enabled for this channel. If you want to disable me, use ".disable".');
         }
