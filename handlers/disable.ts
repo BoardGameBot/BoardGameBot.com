@@ -1,27 +1,26 @@
 import { BotHandler } from './index';
 import { botSingleton, client } from '../state';
 import { Message } from 'discord.js';
-import { mentionedBotAndCommand, authorizeAdminOnly } from '../util';
+import { isCommand, authorizeAdminOnly, isEnabledInChannel } from '../util';
 
 export default class DisableHandler implements BotHandler {
     name = "Disable";
-    init() {
-        client.on('message', msg => {
-            if (mentionedBotAndCommand(msg, 'disable')) {
-                authorizeAdminOnly(msg, () => {
-                    this.disable(msg);
-                });
-            }
-        });
+    onMessage(msg: Message): boolean {
+        if (isCommand(msg, 'disable')) {
+            authorizeAdminOnly(msg, () => {
+                this.disable(msg);
+            });
+            return true;
+        }
+        return false;
     }
 
     private disable(msg: Message) {
-        let channel = botSingleton.channels[msg.channel.id];
-        if (!channel || !channel.enabled) {
-            msg.reply('I am already disabled for this channel. If you want to enable me, use ".enable".');
+        if (isEnabledInChannel(msg.channel)) {
+            msg.channel.send('I am already disabled for this channel.');
         } else {
             botSingleton.channels[msg.channel.id].enabled = false;
-            msg.reply('Done. I am now disabled for this channel. Use ".help" to see all available commands.');
+            msg.channel.send('Done. I am now disabled for this channel.');
         }
     }
 }
