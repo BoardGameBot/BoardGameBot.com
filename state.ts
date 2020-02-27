@@ -1,27 +1,35 @@
 import * as Discord from 'discord.js';
 
-export interface User {
+export interface Player {
     id: string;
     username: string;
 };
 
 export interface Game {
-    game_code: string;
+    gameCode: string;
     state: Object;
-    users: User[];
+    creator: Player;
+    players: Player[];
 };
 
-export interface Channel {
+export interface GameInvites {
+    gameCode: string;
+    players: Player[];
+    accepted: Player[];
+}
+
+export interface GameChannel {
     enabled: boolean;
     currentGame?: Game;
+    invites?: GameInvites;
 };
 
-export interface Channels {
-    [channelId: string]: Channel
+export interface BotChannels {
+    [channelId: string]: GameChannel
 };
 
 export interface Bot {
-    channels: Channels;
+    channels: BotChannels;
 };
 
 export const client = new Discord.Client();

@@ -1,5 +1,5 @@
-import { Message, Channel } from 'discord.js';
-import { botSingleton, client } from './state';
+import { Message, Channel, User } from 'discord.js';
+import { botSingleton, client, Player } from './state';
 
 export const PREFIX = '.';
 
@@ -27,4 +27,18 @@ export function isCommand(msg: Message, cmd: string): boolean {
 
 export function isAnyCommand(msg: Message) {
     return isCommand(msg, '');
+}
+
+export function parseMention(mention: string): User | undefined {
+    const matches = mention.match(/^<@!?(\d+)>$/);
+    if (!matches)
+        return;
+    return client.users.get(matches[1]);
+}
+
+export function convertUserToPlayer(user: User): Player {
+    return {
+        id: user.id,
+        username: user.username
+    };
 }
