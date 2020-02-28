@@ -3,11 +3,12 @@ import { botSingleton, Player, client } from '../state';
 import { Message, User } from 'discord.js';
 import { isCommand, parseMention, isEnabledInChannel, convertUserToPlayer } from '../util';
 import { GAMES_MAP } from '../games';
+import { save } from '../save';
 
-export default class StartHandler implements BotHandler {
-    name = "Start";
+export default class InviteHandler implements BotHandler {
+    name = "Invite";
     onMessage(msg: Message): boolean {
-        if (isCommand(msg, 'start')) {
+        if (isCommand(msg, 'invite')) {
             const args = msg.content.split(' ');
             const gameCode = args[1];
             const usersMentions = args.slice(2, args.length);
@@ -76,6 +77,7 @@ export default class StartHandler implements BotHandler {
             accepted: [convertUserToPlayer(creator)],
             gameCode
         };
+        save();
         const invitees = players.filter((player) => player.id !== creator.id)
             .map((invitee) => `<@${invitee.id}>`)
             .join(', ');

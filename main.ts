@@ -13,7 +13,7 @@ function start() {
 }
 
 client.on('message', (msg) => {
-  if (msg.member.id === client.user.id) {
+  if (msg.member && client.user && msg.member.id === client.user.id) {
     return; // Ignore own messages.
   }
   let recognized = false;
