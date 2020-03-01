@@ -1,8 +1,10 @@
 import EnableHandler from './enable';
 import DisableHandler from './disable';
-import { Message } from 'discord.js';
 import InviteHandler from './invite';
 import HelpHandler from './help';
+import RejectHandler from './reject';
+import AcceptHandler from './accept';
+import { Message } from 'discord.js';
 
 export interface BotHandler {
     name: string;
@@ -14,5 +16,7 @@ export default [
     new EnableHandler(),
     new DisableHandler(),
     new InviteHandler(),
-    new HelpHandler()
+    new HelpHandler(),
+    new RejectHandler(),
+    new AcceptHandler(),
 ];
