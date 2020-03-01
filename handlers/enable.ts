@@ -1,33 +1,38 @@
-import { BotHandler } from './index';
+import { BotHandler } from './bothandler';
 import { botSingleton, client } from '../state';
 import { Message } from 'discord.js';
 import { isRawCommand, authorizeAdminOnly } from '../util';
 import { save } from '../save';
 
-export default class EnableHandler implements BotHandler {
+export default class EnableHandler extends BotHandler {
     name = "Enable";
-    onMessage(msg: Message): boolean {
-        if (isRawCommand(msg, 'enable-bgb')) {
-            authorizeAdminOnly(msg, () => {
-                this.enable(msg);
-            });
-            return true;
-        }
-        return false;
+    handlesMessage() {
+        return isRawCommand(this.msg, 'enable-bgb');
+    }
+
+    reply() {
+        authorizeAdminOnly(this.msg, () => {
+            this.enable();
+        });
     };
 
-    private enable(msg: Message) {
-        let channel = botSingleton.channels[msg.channel.id];
-        if (!channel) {
-            channel = { enabled: false };
-            botSingleton.channels[msg.channel.id] = channel;
+    private enable() {
+        if (!this.channel) {
+            this.createNewChannel();
         }
-        if (!channel.enabled) {
-            botSingleton.channels[msg.channel.id].enabled = true;
+        if (!this.channel.enabled) {
+            this.channel.enabled = true;
             save();
-            msg.channel.send('Done. I am now enabled for this channel.');
+            this.send('Done. I am now enabled for this channel.');
         } else {
-            msg.channel.send('I am already enabled for this channel.');
+            this.send('I am already enabled for this channel.');
         }
+    }
+
+    public createNewChannel() {
+        const channel = { enabled: false };
+        botSingleton.channels[this.msg.channel.id] = channel;
+        this.channel = channel;
+        save();
     }
 }

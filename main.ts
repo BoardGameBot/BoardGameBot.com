@@ -17,9 +17,11 @@ client.on('message', (msg) => {
     return; // Ignore own messages.
   }
   let recognized = false;
-  for (const handler of handlers) {
-    recognized = handler.onMessage(msg);
+  const handlersInst = handlers(msg);
+  for (const handler of handlersInst) {
+    recognized = handler.handlesMessage();
     if (recognized) {
+      handler.reply();
       break;
     }
   }

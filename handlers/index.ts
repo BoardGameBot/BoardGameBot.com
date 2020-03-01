@@ -5,18 +5,15 @@ import HelpHandler from './help';
 import RejectHandler from './reject';
 import AcceptHandler from './accept';
 import { Message } from 'discord.js';
+import { BotHandler } from './bothandler';
 
-export interface BotHandler {
-    name: string;
-    // Executed when a message is sent. Returns true if command was handled. 
-    onMessage: (msg: Message) => boolean;
-};
-
-export default [
-    new EnableHandler(),
-    new DisableHandler(),
-    new InviteHandler(),
-    new HelpHandler(),
-    new RejectHandler(),
-    new AcceptHandler(),
+const handlers: (msg: Message) => BotHandler[] = (msg: Message) => [
+    new EnableHandler(msg),
+    new DisableHandler(msg),
+    new InviteHandler(msg),
+    new HelpHandler(msg),
+    new RejectHandler(msg),
+    new AcceptHandler(msg),
 ];
+
+export default handlers;

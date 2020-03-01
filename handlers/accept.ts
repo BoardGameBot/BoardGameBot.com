@@ -1,54 +1,53 @@
-import { BotHandler } from './index';
+import { BotHandler } from './bothandler';
 import { botSingleton } from '../state';
 import { Message } from 'discord.js';
 import { isCommand } from '../util';
 import { save } from '../save';
 
-export default class AcceptHandler implements BotHandler {
+export default class AcceptHandler extends BotHandler {
     name = "Accept";
-    onMessage(msg: Message): boolean {
-        if (isCommand(msg, 'accept')) {
-            const channel = botSingleton.channels[msg.channel.id];
-            if (!channel.invites) {
-                msg.channel.send('No active invite to accept.');
-                return true;
-            }
-            const playerIds = channel.invites.players.map((player) => player.id);
-            if (!playerIds.includes(msg.member.id)) {
-                msg.channel.send('You are not part of this invite to accept it.');
-                return true;
-            }
-            const acceptedIds = channel.invites.accepted.map((player) => player.id);
-            if (acceptedIds.includes(msg.member.id)) {
-                msg.channel.send('This invite was already accepted by you.');
-                return true;
-            }
-            this.accept(msg, playerIds, acceptedIds);
-            return true;
-        }
-        return false;
+
+    handlesMessage() {
+        return isCommand(this.msg, 'accept');
     }
 
-    accept(msg: Message, playerIds: String[], acceptedIds: String[]) {
+    reply() {
+        if (!this.channel?.invites) {
+            this.send('No active invite to accept.');
+            return;
+        }
+        const playerIds = this.channel?.invites.players.map((player) => player.id);
+        if (!playerIds.includes(this.msg.member.id)) {
+            this.send('You are not part of this invite to accept it.');
+            return;
+        }
+        const acceptedIds = this.channel?.invites.accepted.map((player) => player.id);
+        if (acceptedIds.includes(this.msg.member.id)) {
+            this.send('This invite was already accepted by you.');
+            return;
+        }
+        this.accept(playerIds, acceptedIds);
+    }
+
+    accept(playerIds: String[], acceptedIds: String[]) {
         const remaining = new Set(playerIds).size - new Set(acceptedIds).size;
         if (remaining === 1) {
-            this.startGame(msg);
+            this.startGame();
         } else {
-            botSingleton.channels[msg.channel.id].invites.accepted.push({
-                username: msg.member.user.username,
-                id: msg.member.id
+            this.channel?.invites.accepted.push({
+                username: this.msg.member.user.username,
+                id: this.msg.member.id
             });
             save();
-            msg.channel.send(`Invite accepted, waiting for other ${remaining - 1} player(s) to accept invite.`);
+            this.send(`Invite accepted, waiting for other ${remaining - 1} player(s) to accept invite.`);
         }
     }
 
-    startGame(msg: Message) {
-        const channel = botSingleton.channels[msg.channel.id];
-        const gameCode = channel.invites.gameCode;
-        const players = channel.invites.players;
-        channel.invites = undefined;
-        channel.currentGame = {
+    startGame() {
+        const gameCode = this.channel.invites.gameCode;
+        const players = this.channel.invites.players;
+        this.channel.invites = undefined;
+        this.channel.currentGame = {
             gameCode,
             players,
             creator: players[0],
@@ -56,6 +55,6 @@ export default class AcceptHandler implements BotHandler {
         };
         save();
         const playersUsernames = players.map(player => player.username).join(', ');
-        msg.channel.send(`A ${gameCode} match is starting with ${playersUsernames}!`);
+        this.send(`A ${gameCode} match is starting with ${playersUsernames}!`);
     }
 }
