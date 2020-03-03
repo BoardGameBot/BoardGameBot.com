@@ -8,21 +8,21 @@ import { save } from '../save';
 export default class InviteHandler extends BotHandler {
     name = "Invite";
 
-    handlesMessage() {
+    async handlesMessage() {
         return isCommand(this.msg, 'invite');
     }
 
-    reply() {
+    async reply() {
         const args = this.msg.content.split(' ');
         const gameCode = args[1];
         const usersMentions = args.slice(2, args.length);
-        const users: User[] = usersMentions.map((mention) => parseMention(mention)).filter((user) => user != undefined);
+        const users: User[] = (await Promise.all(usersMentions.map((mention) => parseMention(mention)))).filter((user) => user != undefined);
         users.unshift(this.msg.member.user);
         // TODO: check min/max number of users for specific game
         if (this.checkGameInProgress() &&
             this.checkNumberOfArguments(args) &&
             this.checkValidGame(gameCode) &&
-            this.checkValidUserSelection(users) &&
+            await this.checkValidUserSelection(users) &&
             this.checkMinNumberOfUsers(users)) {
             this.start(users, gameCode);
         }

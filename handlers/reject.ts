@@ -7,11 +7,11 @@ import { save } from '../save';
 
 export default class RejectHandler extends BotHandler {
     name = "Reject";
-    handlesMessage() {
+    async handlesMessage() {
         return isCommand(this.msg, 'reject');
     }
 
-    reply() {
+    async reply() {
         if (!this.channel.invites) {
             this.send('No active invite to reject.');
             return;

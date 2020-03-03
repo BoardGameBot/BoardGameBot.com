@@ -12,10 +12,10 @@ export class BotHandler {
     }
 
     // Whether or not this specific handler cares about this message.
-    public handlesMessage(): boolean { return false; }
+    public async handlesMessage(): Promise<boolean> { return Promise.resolve(false); }
 
     // Reply to the message (will only be called when handlesMessage returns true).
-    public reply(): void { }
+    public async reply(): Promise<void> { }
 
     // Shorthand for sending message backs to the channel.
     public send(content: String) {

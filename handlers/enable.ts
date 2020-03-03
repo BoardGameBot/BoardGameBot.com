@@ -6,11 +6,11 @@ import { save } from '../save';
 
 export default class EnableHandler extends BotHandler {
     name = "Enable";
-    handlesMessage() {
+    async handlesMessage() {
         return isRawCommand(this.msg, 'enable-bgb');
     }
 
-    reply() {
+    async reply() {
         authorizeAdminOnly(this.msg, () => {
             this.enable();
         });

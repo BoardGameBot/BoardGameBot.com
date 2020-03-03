@@ -7,11 +7,11 @@ import { save } from '../save';
 export default class AcceptHandler extends BotHandler {
     name = "Accept";
 
-    handlesMessage() {
+    async handlesMessage() {
         return isCommand(this.msg, 'accept');
     }
 
-    reply() {
+    async reply() {
         if (!this.channel?.invites) {
             this.send('No active invite to accept.');
             return;

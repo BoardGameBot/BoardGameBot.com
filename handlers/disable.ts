@@ -7,11 +7,11 @@ import { save } from '../save';
 export default class DisableHandler extends BotHandler {
     name = "Disable";
 
-    handlesMessage() {
+    async handlesMessage() {
         return isCommand(this.msg, 'disable');
     }
 
-    reply() {
+    async reply() {
         authorizeAdminOnly(this.msg, () => {
             this.channel.enabled = false;
             save();
