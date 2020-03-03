@@ -12,18 +12,15 @@ export function setupDefaultMocks() {
     return { clientMock, guildMock, channelMock, msgMock };
 }
 
-export function mockActiveChannel(channelMock: Channel, stateOverwrite?: Bot) {
+export function mockActiveChannel(channelMock: Channel) {
     const id = '1234';
     channelMock.id = id;
-    const state: Bot = { channels: {} };
-    state.channels[id] = { enabled: true };
-    if (stateOverwrite) {
-        Object.assign(state, stateOverwrite);
-    }
-    mockLoad(state);
+    botSingleton.channels[id] = { enabled: true };
 }
 
-export function mockLoad(state: Bot) {
+export function mockBotState(state?: Bot) {
     botSingleton.channels = {};
-    Object.assign(botSingleton, state);
+    if (state) {
+        Object.assign(botSingleton, state);
+    }
 }

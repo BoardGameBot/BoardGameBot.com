@@ -1,12 +1,12 @@
 import HelpHandler from './help';
-import { mockActiveChannel, setupDefaultMocks } from '../testing/mockUtil'
-import { Message } from 'discord.js';
+import { mockActiveChannel, setupDefaultMocks, mockBotState } from '../testing/mockUtil'
 
 describe('Help Handler', () => {
     const mocks = setupDefaultMocks();
     const handler = new HelpHandler(mocks.msgMock);
 
     test('should reply to ".help"', async () => {
+        mockBotState();
         mockActiveChannel(mocks.channelMock);
         mocks.msgMock.content = '.help';
 
