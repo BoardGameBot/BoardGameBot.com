@@ -1,6 +1,4 @@
 import { BotHandler } from './bothandler';
-import { botSingleton } from '../state';
-import { Message } from 'discord.js';
 import { isCommand } from '../util';
 import { save } from '../save';
 
@@ -8,7 +6,7 @@ export default class AcceptHandler extends BotHandler {
     name = "Accept";
 
     async handlesMessage() {
-        return isCommand(this.msg, 'accept');
+        return isCommand(this.channel, this.msg, 'accept');
     }
 
     async reply() {
@@ -38,7 +36,7 @@ export default class AcceptHandler extends BotHandler {
                 username: this.msg.member.user.username,
                 id: this.msg.member.id
             });
-            save();
+            save(this.state);
             this.send(`Invite accepted, waiting for other ${remaining - 1} player(s) to accept invite.`);
         }
     }
@@ -53,7 +51,7 @@ export default class AcceptHandler extends BotHandler {
             creator: players[0],
             state: {} // TODO
         };
-        save();
+        save(this.state);
         const playersUsernames = players.map(player => player.username).join(', ');
         this.send(`A ${gameCode} match is starting with ${playersUsernames}!`);
     }

@@ -1,5 +1,5 @@
 import { Message, Channel, User } from 'discord.js';
-import { botSingleton, client, Player } from './state';
+import { client, Player, Bot, GameChannel } from './state';
 
 export const PREFIX = '.';
 
@@ -11,23 +11,23 @@ export function authorizeAdminOnly(msg: Message, callback: () => void) {
     }
 }
 
-export function isEnabledInChannel(channel: Channel) {
-    return channel.id in botSingleton.channels && botSingleton.channels[channel.id].enabled;
+export function isEnabledInChannel(gameChannel: GameChannel | undefined, channel: Channel) {
+    return gameChannel && gameChannel.enabled;
 }
 
 export function isRawCommand(msg: Message, cmd: string): boolean {
     return msg.content.toLowerCase().startsWith(PREFIX + cmd);
 }
 
-export function isCommand(msg: Message, cmd: string): boolean {
-    if (isEnabledInChannel(msg.channel) && isRawCommand(msg, cmd)) {
+export function isCommand(gameChannel: GameChannel | undefined, msg: Message, cmd: string): boolean {
+    if (isEnabledInChannel(gameChannel, msg.channel) && isRawCommand(msg, cmd)) {
         return true;
     }
     return false;
 }
 
-export function isAnyCommand(msg: Message) {
-    return isCommand(msg, '');
+export function isAnyCommand(gameChannel: GameChannel | undefined, msg: Message) {
+    return isCommand(gameChannel, msg, '');
 }
 
 export function parseMention(mention: string): Promise<User> {

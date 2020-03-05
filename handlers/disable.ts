@@ -1,20 +1,18 @@
 import { BotHandler } from './bothandler';
-import { botSingleton, client } from '../state';
-import { Message } from 'discord.js';
-import { isCommand, authorizeAdminOnly, isEnabledInChannel } from '../util';
+import { isCommand, authorizeAdminOnly } from '../util';
 import { save } from '../save';
 
 export default class DisableHandler extends BotHandler {
     name = "Disable";
 
     async handlesMessage() {
-        return isCommand(this.msg, 'disable');
+        return isCommand(this.channel, this.msg, 'disable');
     }
 
     async reply() {
         authorizeAdminOnly(this.msg, () => {
             this.channel.enabled = false;
-            save();
+            save(this.state);
             this.send('Done. I am now disabled for this channel.');
         });
     }

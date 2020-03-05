@@ -6,7 +6,7 @@ export default class HelpHandler extends BotHandler {
     name = "Help";
 
     async handlesMessage() {
-        return isCommand(this.msg, 'help');
+        return isCommand(this.channel, this.msg, 'help');
     }
 
     async reply() {

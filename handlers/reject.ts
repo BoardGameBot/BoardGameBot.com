@@ -1,14 +1,11 @@
 import { BotHandler } from './bothandler';
-import { botSingleton, client } from '../state';
-import { Message, Channel } from 'discord.js';
-import { isCommand, authorizeAdminOnly, isEnabledInChannel } from '../util';
-import { rejects } from 'assert';
+import { isCommand } from '../util';
 import { save } from '../save';
 
 export default class RejectHandler extends BotHandler {
     name = "Reject";
     async handlesMessage() {
-        return isCommand(this.msg, 'reject');
+        return isCommand(this.channel, this.msg, 'reject');
     }
 
     async reply() {
@@ -26,7 +23,7 @@ export default class RejectHandler extends BotHandler {
 
     reject() {
         this.channel.invites = undefined;
-        save();
+        save(this.state);
         this.send('Invite rejected.');
     }
 }

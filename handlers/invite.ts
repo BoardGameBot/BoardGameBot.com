@@ -1,6 +1,5 @@
 import { BotHandler } from './bothandler';
-import { botSingleton, Player, client } from '../state';
-import { Message, User } from 'discord.js';
+import { User } from 'discord.js';
 import { isCommand, parseMention, isEnabledInChannel, convertUserToPlayer } from '../util';
 import { GAMES_MAP } from '../games';
 import { save } from '../save';
@@ -9,7 +8,7 @@ export default class InviteHandler extends BotHandler {
     name = "Invite";
 
     async handlesMessage() {
-        return isCommand(this.msg, 'invite');
+        return isCommand(this.channel, this.msg, 'invite');
     }
 
     async reply() {
@@ -22,7 +21,7 @@ export default class InviteHandler extends BotHandler {
         if (this.checkGameInProgress() &&
             this.checkNumberOfArguments(args) &&
             this.checkValidGame(gameCode) &&
-            await this.checkValidUserSelection(users) &&
+            this.checkValidUserSelection(users) &&
             this.checkMinNumberOfUsers(users)) {
             this.start(users, gameCode);
         }
@@ -78,7 +77,7 @@ export default class InviteHandler extends BotHandler {
             accepted: [convertUserToPlayer(creator)],
             gameCode
         };
-        save();
+        save(this.state);
         const invitees = players.filter((player) => player.id !== creator.id)
             .map((invitee) => `<@${invitee.id}>`)
             .join(', ');

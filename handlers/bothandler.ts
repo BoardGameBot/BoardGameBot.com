@@ -1,14 +1,16 @@
 import { Message } from 'discord.js';
-import { botSingleton, GameChannel } from '../state';
+import { GameChannel, Bot } from '../state';
 
 export class BotHandler {
     name: String;
     msg: Message;
+    state: Bot;
     channel: GameChannel | undefined;
 
-    constructor(msg: Message) {
+    constructor(state: Bot, msg: Message) {
         this.msg = msg;
-        this.channel = botSingleton.channels[msg.channel.id];
+        this.state = state;
+        this.channel = state.channels[msg.channel.id];
     }
 
     // Whether or not this specific handler cares about this message.

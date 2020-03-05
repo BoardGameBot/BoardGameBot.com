@@ -1,5 +1,4 @@
 import * as Discord from 'discord.js';
-import { load } from './save';
 
 export interface Player {
     id: string;
@@ -34,4 +33,3 @@ export interface Bot {
 };
 
 export const client = new Discord.Client();
-export const botSingleton: Bot = load();

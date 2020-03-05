@@ -1,17 +1,34 @@
 import HelpHandler from './help';
-import { mockActiveChannel, setupDefaultMocks, mockBotState } from '../testing/mockUtil'
+import { mockActiveChannel, defaultState } from '../testing/mockUtil'
 
 describe('Help Handler', () => {
-    const mocks = setupDefaultMocks();
-    const handler = new HelpHandler(mocks.msgMock);
+    let state;
+    let msgMock;
 
-    test('should reply to ".help"', async () => {
-        mockBotState();
-        mockActiveChannel(mocks.channelMock);
-        mocks.msgMock.content = '.help';
+    beforeEach(() => {
+        state = defaultState();
+        msgMock = { channel: { id: '#foo' } } as any;
+    })
+
+    test('should handle ".help"', async () => {
+        mockActiveChannel(state, '#foo');
+        const handler = new HelpHandler(state, msgMock);
+        msgMock.content = '.help';
 
         const result = await handler.handlesMessage();
 
         expect(result).toEqual(true);
     });
+
+    test('should reply to ".help"', async () => {
+        mockActiveChannel(state, '#foo');
+        const handler = new HelpHandler(state, msgMock);
+        msgMock.content = '.help';
+        const sendMock = jest.fn();
+        msgMock.author = { send: sendMock };
+
+        await handler.reply();
+
+        expect(sendMock).toBeCalledTimes(1);
+    })
 })
