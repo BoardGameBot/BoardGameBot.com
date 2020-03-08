@@ -1,9 +1,23 @@
 import { Bot } from "../state";
+import { Channel, ChannelType, User } from '../messaging';
+import { Namespace } from "../id";
 
-export function mockActiveChannel(state: Bot, id: string) {
-    state.channels[id] = { enabled: true };
+export function setActiveChannel(state: Bot, channel: Channel) {
+    state.channels[channel.id.value] = { enabled: true };
 }
 
 export function defaultState(): Bot {
     return { channels: {} };
+}
+
+export function createPublicChannelMock(id: string): Channel {
+    return {
+        type: ChannelType.PUBLIC_GROUP,
+        id: { namespace: Namespace.DISCORD, value: id },
+        name: id
+    };
+}
+
+export function createUserMock(id: string, username: string): User {
+    return { id: { namespace: Namespace.DISCORD, value: id }, username };
 }

@@ -1,20 +1,21 @@
-import EnableHandler from './enable';
-import DisableHandler from './disable';
-import InviteHandler from './invite';
-import HelpHandler from './help';
-import RejectHandler from './reject';
-import AcceptHandler from './accept';
-import { Message } from 'discord.js';
-import { BotHandler } from './bothandler';
+import EnableHandler from './EnableHandler';
+import DisableHandler from './DisableHandler';
+import InviteHandler from './InviteHandler';
+import HelpHandler from './HelpHandler';
+import RejectHandler from './RejectHandler';
+import AcceptHandler from './AcceptHandler';
+import { Message } from '../messaging';
+import { MessageHandler } from '../MessageHandler';
 import { Bot } from '../state';
+import { MessagingEnvironment } from '../MessagingEnvironment';
 
-const handlers: (state: Bot, msg: Message) => BotHandler[] = (state, msg) => [
-    new EnableHandler(state, msg),
-    new DisableHandler(state, msg),
-    new InviteHandler(state, msg),
-    new HelpHandler(state, msg),
-    new RejectHandler(state, msg),
-    new AcceptHandler(state, msg),
+const handlers: (state: Bot, msg: Message, env: MessagingEnvironment) => MessageHandler[] = (state, msg, env) => [
+    new EnableHandler(state, msg, env),
+    new DisableHandler(state, msg, env),
+    new InviteHandler(state, msg, env),
+    new HelpHandler(state, msg, env),
+    new RejectHandler(state, msg, env),
+    new AcceptHandler(state, msg, env),
 ];
 
 export default handlers;

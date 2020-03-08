@@ -1,7 +1,8 @@
 import * as Discord from 'discord.js';
+import { Id } from './Id';
 
 export interface Player {
-    id: string;
+    id: Id;
     username: string;
 };
 

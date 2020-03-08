@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "bot": "ts-node main.ts",
+    "discord": "ts-node discord/main.ts",
     "test": "jest"
   },
   "author": "",

@@ -1,17 +1,12 @@
-import { Message, Channel, User } from 'discord.js';
-import { client, Player, Bot, GameChannel } from './state';
+import { Message, Channel, User, Reply, ChannelType } from './messaging';
+import { Player, GameChannel } from './state';
 
 export const PREFIX = '.';
 
-export function authorizeAdminOnly(msg: Message, callback: () => void) {
-    if (msg.member.hasPermission('KICK_MEMBERS', { checkAdmin: true })) {
-        callback();
-    } else {
-        msg.channel.send('Sorry, you need to be a server admin/owner to do that.');
-    }
-}
-
 export function isEnabledInChannel(gameChannel: GameChannel | undefined, channel: Channel) {
+    if (channel.type !== ChannelType.PUBLIC_GROUP) {
+        return true;
+    }
     return gameChannel && gameChannel.enabled;
 }
 
@@ -30,16 +25,20 @@ export function isAnyCommand(gameChannel: GameChannel | undefined, msg: Message)
     return isCommand(gameChannel, msg, '');
 }
 
-export function parseMention(mention: string): Promise<User> {
-    const matches = mention.match(/^<@!?(\d+)>$/);
-    if (!matches)
-        return;
-    return client.users.fetch(matches[1]);
-}
-
 export function convertUserToPlayer(user: User): Player {
     return {
         id: user.id,
         username: user.username
+    };
+}
+
+export function simpleReply(channel: Channel, content: string): Reply {
+    return {
+        messages: [
+            {
+                channel,
+                content
+            }
+        ]
     };
 }
