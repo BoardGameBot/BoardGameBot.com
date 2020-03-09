@@ -21,7 +21,7 @@ const state = load();
 const env = new DiscordMessagingEnvironment(client);
 
 client.on('message', async (msg: DiscordMessage) => {
-  if (!msg || !msg.id || !msg.channel.id || ['dm', 'text'].indexOf(msg.type) === -1) {
+  if (!msg || !msg.id || ['dm', 'text'].indexOf(msg.type) === -1) {
     return; // Ignore weird messages.
   }
   if (msg.member && client.user && msg.member.id === client.user.id) {

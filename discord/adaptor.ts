@@ -66,6 +66,7 @@ export function translateDiscordChannelType(channelType: string): ChannelType {
 }
 
 export function translateDiscordChannel(channel: discord.Channel, guild: discord.Guild): Channel {
+    // TODO(felizardo): NOT WORKING FOR DMs 
     return {
         type: translateDiscordChannelType(channel.type),
         id: genId(channel.id),
