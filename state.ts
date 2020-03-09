@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js';
-import { Id } from './Id';
+import { Id } from './id';
 
 export interface Player {
     id: Id;

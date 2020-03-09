@@ -24,15 +24,10 @@ export class MessageHandler {
     public async reply(): Promise<Reply> { return Promise.resolve({ messages: [] }); }
 
     protected simpleReply(content: string): Reply {
-        return simpleReply(this.msg.channel, content);
+        return simpleReply(this.msg.channel.type, content);
     };
 
     protected pvtReply(content: string): Reply {
-        const pvtChannel: Channel = {
-            type: ChannelType.PVT,
-            id: this.msg.author.id,
-            name: this.msg.author.username
-        };
-        return simpleReply(pvtChannel, content);
+        return simpleReply(ChannelType.PVT, content);
     }
 };

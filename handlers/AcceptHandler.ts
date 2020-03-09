@@ -12,15 +12,15 @@ export default class AcceptHandler extends MessageHandler {
 
     async reply(): Promise<Reply> {
         if (!this.channel?.invites) {
-            return simpleReply(this.msg.channel, 'No active invite to accept.');
+            return this.simpleReply('No active invite to accept.');
         }
         const playerIds = this.channel?.invites.players.map((player) => player.id.value);
         if (!playerIds.includes(this.msg.author.id.value)) {
-            return simpleReply(this.msg.channel, 'You are not part of this invite to accept it.');
+            return this.simpleReply('You are not part of this invite to accept it.');
         }
         const acceptedIds = this.channel?.invites.accepted.map((player) => player.id.value);
         if (acceptedIds.includes(this.msg.author.id.value)) {
-            return simpleReply(this.msg.channel, 'This invite was already accepted by you.');
+            return this.simpleReply('This invite was already accepted by you.');
         }
         return this.accept(playerIds, acceptedIds);
     }
@@ -35,8 +35,7 @@ export default class AcceptHandler extends MessageHandler {
                 id: this.msg.author.id
             });
             save(this.state);
-            return simpleReply(
-                this.msg.channel,
+            return this.simpleReply(
                 `Invite accepted, waiting for other ${remaining - 1} player(s) to accept invite.`
             );
         }
@@ -54,8 +53,7 @@ export default class AcceptHandler extends MessageHandler {
         };
         save(this.state);
         const playersUsernames = players.map(player => player.username).join(', ');
-        return simpleReply(
-            this.msg.channel,
+        return this.simpleReply(
             `A ${gameCode} match is starting with ${playersUsernames}!`
         );
     }

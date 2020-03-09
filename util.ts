@@ -32,11 +32,11 @@ export function convertUserToPlayer(user: User): Player {
     };
 }
 
-export function simpleReply(channel: Channel, content: string): Reply {
+export function simpleReply(type: ChannelType, content: string): Reply {
     return {
         messages: [
             {
-                channel,
+                type,
                 content
             }
         ]

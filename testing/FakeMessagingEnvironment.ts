@@ -3,7 +3,7 @@ import { MessagingEnvironment } from "../MessagingEnvironment";
 export default class FakeMessagingEnvironment extends MessagingEnvironment {
     isAdminValue = false;
 
-    isAdmin() {
+    async isAdmin() {
         return this.isAdminValue;
     }
 

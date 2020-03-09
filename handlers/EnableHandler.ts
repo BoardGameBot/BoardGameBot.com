@@ -11,7 +11,7 @@ export default class EnableHandler extends MessageHandler {
     }
 
     async reply(): Promise<Reply> {
-        if (!this.env.isAdmin(this.msg.author, this.msg.channel)) {
+        if (!(await this.env.isAdmin(this.msg.author, this.msg.channel))) {
             return this.simpleReply('Sorry, you need to be a server admin/owner to do that.');
         }
         return this.enable();

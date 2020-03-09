@@ -11,13 +11,13 @@ export interface Mention {
 }
 
 export enum ChannelType {
-    PVT, PUBLIC_GROUP, PRIVATE_GROUP
+    PVT, PUBLIC_GROUP, PRIVATE_GROUP, OTHER
 }
 
 export interface Channel {
     type: ChannelType;
     id: Id;
-    name: string;
+    serverId?: Id;
 }
 
 export interface Message {
@@ -28,7 +28,7 @@ export interface Message {
 }
 
 export interface ReplyMessage {
-    channel: Channel;
+    type: ChannelType;
     content: string;
     mentions?: Mention[];
 }

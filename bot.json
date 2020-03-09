@@ -1,25 +1,7 @@
 {
   "channels": {
     "682499174004162560": {
-      "enabled": true,
-      "currentGame": {
-        "gameCode": "tictactoe",
-        "players": [
-          {
-            "id": "430198697524199425",
-            "username": "flamecoals"
-          },
-          {
-            "id": "338830544853008395",
-            "username": "felizardo"
-          }
-        ],
-        "creator": {
-          "id": "430198697524199425",
-          "username": "flamecoals"
-        },
-        "state": {}
-      }
+      "enabled": true
     }
   }
 }
