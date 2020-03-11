@@ -21,12 +21,10 @@ const state = load();
 const env = new DiscordMessagingEnvironment(client);
 
 client.on('message', async (msg: DiscordMessage) => {
-  console.log("<==== Incoming message: " + msg.content)
   if (!msg || !msg.id || msg.type !== 'DEFAULT' || ['dm', 'text'].indexOf(msg.channel.type) === -1) {
     return; // Ignore weird messages.
   }
   if (msg.author && client.user && msg.author.id === client.user.id) {
-    console.log('OWN MESSAGE');
     return; // Ignore own messages.
   }
   let recognized = false;
