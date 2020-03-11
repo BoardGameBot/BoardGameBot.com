@@ -21,10 +21,12 @@ const state = load();
 const env = new DiscordMessagingEnvironment(client);
 
 client.on('message', async (msg: DiscordMessage) => {
-  if (!msg || !msg.id || ['dm', 'text'].indexOf(msg.type) === -1) {
+  console.log("<==== Incoming message: " + msg.content)
+  if (!msg || !msg.id || msg.type !== 'DEFAULT' || ['dm', 'text'].indexOf(msg.channel.type) === -1) {
     return; // Ignore weird messages.
   }
-  if (msg.member && client.user && msg.member.id === client.user.id) {
+  if (msg.author && client.user && msg.author.id === client.user.id) {
+    console.log('OWN MESSAGE');
     return; // Ignore own messages.
   }
   let recognized = false;
@@ -35,6 +37,7 @@ client.on('message', async (msg: DiscordMessage) => {
     if (recognized) {
       const reply = await handler.reply();
       sendReplyToDiscord(msg, reply);
+      break;
     }
   }
 });

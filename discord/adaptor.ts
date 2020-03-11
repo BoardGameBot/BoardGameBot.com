@@ -65,13 +65,15 @@ export function translateDiscordChannelType(channelType: string): ChannelType {
     }
 }
 
-export function translateDiscordChannel(channel: discord.Channel, guild: discord.Guild): Channel {
-    // TODO(felizardo): NOT WORKING FOR DMs 
+export function translateDiscordChannel(msg: discord.Message): Channel {
+    const author = msg.author;
+    const channel = msg.channel;
+    const guild = msg.guild;
     return {
         type: translateDiscordChannelType(channel.type),
-        id: genId(channel.id),
-        serverId: genId(guild.id)
-    }
+        id: genId(channel.type == 'text' ? channel.id : author.id),
+        serverId: guild ? genId(guild.id) : undefined
+    };
 }
 
 export function translateDiscordUser(user: discord.User): User {
@@ -84,7 +86,7 @@ export function translateDiscordUser(user: discord.User): User {
 export async function translateDiscordMessage(msg: discord.Message): Promise<Message> {
     return {
         author: translateDiscordUser(msg.author),
-        channel: translateDiscordChannel(msg.channel, msg.guild),
+        channel: translateDiscordChannel(msg),
         content: msg.content,
         mentions: await translateDiscordMentions(msg)
     };

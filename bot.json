@@ -1,7 +1,35 @@
 {
   "channels": {
     "682499174004162560": {
-      "enabled": true
+      "enabled": true,
+      "invites": {
+        "players": [
+          {
+            "id": {
+              "namespace": 0,
+              "value": "430198697524199425"
+            },
+            "username": "flamecoals"
+          },
+          {
+            "id": {
+              "namespace": 0,
+              "value": "338830544853008395"
+            },
+            "username": "felizardo"
+          }
+        ],
+        "accepted": [
+          {
+            "id": {
+              "namespace": 0,
+              "value": "430198697524199425"
+            },
+            "username": "flamecoals"
+          }
+        ],
+        "gameCode": "tictactoe"
+      }
     }
   }
 }

@@ -60,7 +60,7 @@ export default class InviteHandler extends MessageHandler {
     }
 
     private checkValidUserSelection(users: User[]): MaybeReply {
-        const ids = users.map((user) => user.id);
+        const ids = users.map((user) => user.id.value);
         const idsSet = new Set(ids);
         if (ids.length != idsSet.size) {
             return this.simpleReply(
@@ -90,6 +90,6 @@ export default class InviteHandler extends MessageHandler {
             .map((invitee) => invitee.username)
             .join(', ');
         return this.simpleReply(
-            `${invitees}, do you want to play ${gameCode} with <@${creator.id}> ? Use ".accept" to accept, or ".reject" to reject invite.`);
+            `${invitees}, do you want to play ${gameCode} with <@${creator.id.value}> ? Use ".accept" to accept, or ".reject" to reject invite.`);
     }
 }

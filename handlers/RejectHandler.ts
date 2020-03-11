@@ -14,8 +14,8 @@ export default class RejectHandler extends MessageHandler {
         if (!this.channel.invites) {
             return this.simpleReply('No active invite to reject.');
         }
-        const playerIds = this.channel.invites.players.map((player) => player.id);
-        if (!playerIds.includes(this.msg.author.id)) {
+        const playerIds = this.channel.invites.players.map((player) => player.id.value);
+        if (!playerIds.includes(this.msg.author.id.value)) {
             return this.simpleReply('You are not part of this invite to reject it.');
         }
         return this.reject();
