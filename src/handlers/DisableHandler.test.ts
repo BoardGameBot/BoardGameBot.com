@@ -1,11 +1,11 @@
 jest.mock('../save');
 import { save } from '../save';
-import EnableHandler from './EnableHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../testing/mockUtil'
-import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
+import DisableHandler from './DisableHandler';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../../testing/mockUtil'
+import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 
-describe('Enable Handler', () => {
+describe('Disable Handler', () => {
     let state;
     let env: FakeMessagingEnvironment;
 
@@ -14,29 +14,30 @@ describe('Enable Handler', () => {
         env = new FakeMessagingEnvironment();
     })
 
-    describe('.enable', () => {
+    describe('.disable', () => {
         const author = createUserMock('bobId', 'Bob');
         const channel = createPublicChannelMock('#foo');
-        const msg: Message = { author, channel, content: '.enable-bgb' };
+        const msg: Message = { author, channel, content: '.disable' };
 
         test('should handle', async () => {
             setActiveChannel(state, channel);
-            const handler = new EnableHandler(state, msg, env);
+            const handler = new DisableHandler(state, msg, env);
 
             const result = await handler.handlesMessage();
 
             expect(result).toEqual(true);
         });
 
-        test('should enable', async () => {
+        test('reply should disable', async () => {
             env.setIsAdmin(true);
-            const handler = new EnableHandler(state, msg, env);
+            setActiveChannel(state, channel);
+            const handler = new DisableHandler(state, msg, env);
 
             const result = await handler.reply();
 
             expect(result.messages.length).toEqual(1);
             expect(save).toHaveBeenCalled();
-            expect(state.channels['#foo'].enabled).toBe(true);
+            expect(state.channels['#foo'].enabled).toBe(false);
         });
     });
 })

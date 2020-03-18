@@ -1,5 +1,5 @@
 import { client } from '../state';
-import handlers from '../handlers';;
+import handlers from '../handlers';
 import { Message as DiscordMessage } from 'discord.js';
 import { load } from '../save';
 import { translateDiscordMessage, sendReplyToDiscord } from './adaptor';

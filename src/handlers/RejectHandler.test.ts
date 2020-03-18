@@ -1,8 +1,8 @@
 jest.mock('../save');
 import { save } from '../save';
 import RejectHandler from './RejectHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../testing/mockUtil'
-import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../../testing/mockUtil'
+import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 
 describe('Reject Handler', () => {
