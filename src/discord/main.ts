@@ -5,15 +5,18 @@ import { load } from '../save';
 import { translateDiscordMessage, sendReplyToDiscord } from './adaptor';
 import DiscordMessagingEnvironment from './DiscordMessagingEnvironment';
 import * as dotenv from 'dotenv';
+import Logger from '../Logger';
 
 dotenv.config();
+
+const logger = new Logger();
+
 function start() {
   const token = process.env.DISCORD_TOKEN;
   if (!token) {
     throw new Error('No token found!!');
-  } else {
-    console.log('Using token: "' + token + '"');
   }
+  logger.info('Using token: "' + token + '"');
   client.login(token);
 }
 
@@ -41,7 +44,7 @@ client.on('message', async (msg: DiscordMessage) => {
 });
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Logged in as ${client.user!.tag}!`);
 });
 
 start();

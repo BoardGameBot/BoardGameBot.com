@@ -1,7 +1,7 @@
 import { Bot } from './state';
 import * as fs from 'fs';
 
-const FILEPATH = __dirname + '/bot.json';
+const FILEPATH = __dirname + '/../bot.json';
 
 export function save(state: Bot) {
     const data = JSON.stringify(state, null, 2);
