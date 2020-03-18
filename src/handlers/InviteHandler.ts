@@ -17,8 +17,7 @@ export default class InviteHandler extends MessageHandler {
     async reply(): Promise<Reply> {
         const args = this.msg.content.split(' ');
         const gameCode = args[1];
-        const usersMentions = args.slice(2, args.length);
-        const users: User[] = this.msg.mentions.map((mention) => mention.user);
+        const users: User[] = (this.msg.mentions || []).map((mention) => mention.user);
         users.unshift(this.msg.author);
         // TODO: check min/max number of users for specific game
         const checks: MaybeReply[] = [
@@ -32,7 +31,7 @@ export default class InviteHandler extends MessageHandler {
         if (errorReply) {
             return errorReply;
         }
-        return this.start(users, gameCode);
+        return this.invite(users, gameCode);
     }
 
     private checkGameInProgress(): MaybeReply {
@@ -46,7 +45,7 @@ export default class InviteHandler extends MessageHandler {
     private checkNumberOfArguments(args: String[]): MaybeReply {
         if (args.length < 3) {
             return this.simpleReply(
-                'Not enough arguments. Correct usage: ".start GAME @PLAYER1 @PLAYER2..."'
+                'Not enough arguments. Correct usage: ".invite GAME @PLAYER1 @PLAYER2..."'
             );
         }
     }
@@ -77,7 +76,7 @@ export default class InviteHandler extends MessageHandler {
         }
     }
 
-    private start(users: User[], gameCode): Reply {
+    private invite(users: User[], gameCode): Reply {
         const players = users.map((user) => convertUserToPlayer(user));
         const creator = this.msg.author;
         this.channel.invites = {
