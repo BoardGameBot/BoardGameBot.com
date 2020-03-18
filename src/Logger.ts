@@ -25,7 +25,7 @@ export default class Logger {
       this.logger.setLevel(logger.levels.DEBUG);
     }
   }
-  debug(...msg: any[]) {
+  debug(...msg: any) {
     const funcName = (new Error() as any).stack
       .split('\n')[2]
       .trim()
@@ -33,7 +33,7 @@ export default class Logger {
     this.updatePrefix(funcName);
     this.logger.debug(...msg);
   }
-  info(...msg: any[]) {
+  info(...msg: any) {
     const funcName = (new Error() as any).stack
       .split('\n')[2]
       .trim()
@@ -41,7 +41,7 @@ export default class Logger {
     this.updatePrefix(funcName);
     this.logger.info(...msg);
   }
-  warn(...msg: any[]) {
+  warn(...msg: any) {
     const funcName = (new Error() as any).stack
       .split('\n')[2]
       .trim()
@@ -49,7 +49,7 @@ export default class Logger {
     this.updatePrefix(funcName);
     this.logger.warn(...msg);
   }
-  error(...msg: any[]) {
+  error(...msg: any) {
     const funcName = (new Error() as any).stack
       .split('\n')[2]
       .trim()
