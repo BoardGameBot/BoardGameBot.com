@@ -1,4 +1,4 @@
-import { MessagingEnvironment } from "../MessagingEnvironment";
+import { MessagingEnvironment } from "../src/MessagingEnvironment";
 
 export default class FakeMessagingEnvironment extends MessagingEnvironment {
     isAdminValue = false;
