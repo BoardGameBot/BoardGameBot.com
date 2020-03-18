@@ -1,6 +1,6 @@
 import HelpHandler from './HelpHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../../testing/mockUtil'
-import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../testing/mockUtil'
+import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 
 describe('Help Handler', () => {

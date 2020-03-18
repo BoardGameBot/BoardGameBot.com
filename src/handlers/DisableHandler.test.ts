@@ -1,8 +1,8 @@
 jest.mock('../save');
 import { save } from '../save';
 import DisableHandler from './DisableHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../../testing/mockUtil'
-import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../testing/mockUtil'
+import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 
 describe('Disable Handler', () => {

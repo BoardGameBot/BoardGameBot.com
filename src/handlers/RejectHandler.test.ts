@@ -1,8 +1,8 @@
 jest.mock('../save');
 import { save } from '../save';
 import RejectHandler from './RejectHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../../testing/mockUtil'
-import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../testing/mockUtil'
+import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 
 describe('Reject Handler', () => {
@@ -38,16 +38,16 @@ describe('Reject Handler', () => {
         });
 
         test('not part of the invite', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('joe'), username: 'Joe'},
-                        {id: mockId('alice'), username: 'Alice'}
+                        { id: mockId('joe'), username: 'Joe' },
+                        { id: mockId('alice'), username: 'Alice' }
                     ],
                     accepted: [
-                        {id: mockId('joe'), username: 'Joe'}, 
+                        { id: mockId('joe'), username: 'Joe' },
                     ]
                 }
             };
@@ -59,17 +59,17 @@ describe('Reject Handler', () => {
         });
 
         test('should reject', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('joe'), username: 'Joe'},
-                        {id: mockId('bob'), username: 'Bob'}, 
-                        {id: mockId('alice'), username: 'Alice'}
+                        { id: mockId('joe'), username: 'Joe' },
+                        { id: mockId('bob'), username: 'Bob' },
+                        { id: mockId('alice'), username: 'Alice' }
                     ],
                     accepted: [
-                        {id: mockId('joe'), username: 'Joe'}, 
+                        { id: mockId('joe'), username: 'Joe' },
                     ]
                 }
             };

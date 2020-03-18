@@ -1,8 +1,8 @@
 jest.mock('../save');
 import { save } from '../save';
 import InviteHandler from './InviteHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../../testing/mockUtil'
-import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../testing/mockUtil'
+import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
 import { Message, Channel, User } from '../messaging';
 import { Bot, Player } from '../state';
 

@@ -1,8 +1,8 @@
 jest.mock('../save');
 import { save } from '../save';
 import AcceptHandler from './AcceptHandler';
-import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../../testing/mockUtil'
-import FakeMessagingEnvironment from '../../testing/FakeMessagingEnvironment';
+import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock, mockId } from '../testing/mockUtil'
+import FakeMessagingEnvironment from '../testing/FakeMessagingEnvironment';
 import { Message } from '../messaging';
 import { Bot } from '../state';
 
@@ -39,16 +39,16 @@ describe('Accept Handler', () => {
         });
 
         test('not part of the invite', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('alice'), username: 'Alice'}, 
-                        {id: mockId('joe'), username: 'Joe'}
+                        { id: mockId('alice'), username: 'Alice' },
+                        { id: mockId('joe'), username: 'Joe' }
                     ],
                     accepted: [
-                        {id: mockId('alice'), username: 'Alice'}, 
+                        { id: mockId('alice'), username: 'Alice' },
                     ]
                 }
             };
@@ -60,16 +60,16 @@ describe('Accept Handler', () => {
         });
 
         test('already accepted invite', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('bob'), username: 'Bob'}, 
-                        {id: mockId('alice'), username: 'Alice'}
+                        { id: mockId('bob'), username: 'Bob' },
+                        { id: mockId('alice'), username: 'Alice' }
                     ],
                     accepted: [
-                        {id: mockId('bob'), username: 'Bob'}, 
+                        { id: mockId('bob'), username: 'Bob' },
                     ]
                 }
             };
@@ -81,17 +81,17 @@ describe('Accept Handler', () => {
         });
 
         test('Invite accepted', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('joe'), username: 'Joe'},
-                        {id: mockId('bob'), username: 'Bob'}, 
-                        {id: mockId('alice'), username: 'Alice'}
+                        { id: mockId('joe'), username: 'Joe' },
+                        { id: mockId('bob'), username: 'Bob' },
+                        { id: mockId('alice'), username: 'Alice' }
                     ],
                     accepted: [
-                        {id: mockId('joe'), username: 'Joe'}, 
+                        { id: mockId('joe'), username: 'Joe' },
                     ]
                 }
             };
@@ -104,16 +104,16 @@ describe('Accept Handler', () => {
         });
 
         test('Match starting', async () => {
-            state.channels["#foo"] = { 
-                enabled: true, 
-                invites: { 
+            state.channels["#foo"] = {
+                enabled: true,
+                invites: {
                     gameCode: 'tictactoe',
                     players: [
-                        {id: mockId('joe'), username: 'Joe'},
-                        {id: mockId('bob'), username: 'Bob'},
+                        { id: mockId('joe'), username: 'Joe' },
+                        { id: mockId('bob'), username: 'Bob' },
                     ],
                     accepted: [
-                        {id: mockId('joe'), username: 'Joe'}, 
+                        { id: mockId('joe'), username: 'Joe' },
                     ]
                 }
             };

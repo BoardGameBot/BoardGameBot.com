@@ -1,6 +1,6 @@
-import { Bot } from "../src/state";
-import { Channel, ChannelType, User } from '../src/messaging';
-import { Namespace, Id } from "../src/id";
+import { Bot } from "../state";
+import { Channel, ChannelType, User } from '../messaging';
+import { Namespace, Id } from "../id";
 
 export function setActiveChannel(state: Bot, channel: Channel) {
     state.channels[channel.id.value] = { enabled: true };
