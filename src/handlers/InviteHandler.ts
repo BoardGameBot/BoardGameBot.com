@@ -76,7 +76,7 @@ export default class InviteHandler extends MessageHandler {
         }
     }
 
-    private invite(users: User[], gameCode): Reply {
+    private invite(users: User[], gameCode: string): Reply {
         const players = users.map((user) => convertUserToPlayer(user));
         const creator = this.msg.author;
         this.channel.invites = {
