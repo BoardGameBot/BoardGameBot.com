@@ -8,6 +8,7 @@ import { Message } from '../messaging';
 import { MessageHandler } from '../MessageHandler';
 import { Bot } from '../state';
 import { MessagingEnvironment } from '../MessagingEnvironment';
+import GenericGameHandler from './GenericHandler';
 
 const handlers: (state: Bot, msg: Message, env: MessagingEnvironment) => MessageHandler[] = (state, msg, env) => [
     new EnableHandler(state, msg, env),
@@ -16,6 +17,7 @@ const handlers: (state: Bot, msg: Message, env: MessagingEnvironment) => Message
     new HelpHandler(state, msg, env),
     new RejectHandler(state, msg, env),
     new AcceptHandler(state, msg, env),
+    new GenericGameHandler(state, msg, env),
 ];
 
 export default handlers;

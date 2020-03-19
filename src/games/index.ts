@@ -1,5 +1,6 @@
 import { GameHandler } from './GameHandler';
 import tictactoe from './tictactoe';
+import { GameConfig } from 'boardgame.io/core';
 
 export const GAMES_MAP: GameDefMap = {
     'tictactoe': tictactoe
@@ -11,7 +12,8 @@ export interface GameDef {
     description: string;
     minPlayers: number;
     maxPlayers: number;
-    handler: typeof GameHandler;
+    gameConfig: GameConfig;
+    handlers: (typeof GameHandler)[];
 }
 
 export interface GameDefMap {

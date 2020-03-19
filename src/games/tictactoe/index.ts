@@ -1,5 +1,6 @@
-import TicTacToeGameHandler from './TicTacToeGameHandler';
+import MoveHandler from './handlers/MoveHandler';
 import { GameDef } from '../index';
+import { TictactoeGame } from './game';
 
 const game: GameDef = {
     code: 'tictactoe',
@@ -7,7 +8,8 @@ const game: GameDef = {
     description: 'Classic game of Tic-Tac-Toe',
     minPlayers: 2,
     maxPlayers: 2,
-    handler: TicTacToeGameHandler
+    gameConfig: TictactoeGame,
+    handlers: [MoveHandler]
 };
 
 export default game;
