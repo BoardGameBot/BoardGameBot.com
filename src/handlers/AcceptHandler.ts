@@ -49,7 +49,6 @@ export default class AcceptHandler extends MessageHandler {
             gameCode,
             players,
             creator: players[0],
-            state: {} // TODO
         };
         save(this.state);
         const playersUsernames = players.map(player => player.username).join(', ');

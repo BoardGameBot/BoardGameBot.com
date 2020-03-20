@@ -8,7 +8,7 @@ export interface Player {
 
 export interface Game {
     gameCode: string;
-    state: Object;
+    state?: Object;
     creator: Player;
     players: Player[];
 };

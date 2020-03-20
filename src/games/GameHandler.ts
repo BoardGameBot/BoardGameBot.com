@@ -4,13 +4,23 @@ import { Bot } from '../state';
 import { Message } from '../messaging';
 import { Client, GameConfig } from 'boardgame.io/client';
 import { GameDef } from '../games';
+import { save } from '../save';
 
 export class GameHandler extends MessageHandler {
     gameDef: GameDef;
-    bgio: Client;
+    game: Client;
 
     constructor(state: Bot, msg: Message, env: MessagingEnvironment, gameDef: GameDef) {
         super(state, msg, env);
-        this.bgio = Client({ game: gameDef.gameConfig });
+        this.game = Client({ game: gameDef.gameConfig });
+        const previousState = this.channel.currentGame.state;
+        if (previousState) {
+            this.game.overrideGameState(previousState);
+        }
+    }
+
+    save() {
+        this.channel.currentGame.state = this.game.store.getState();
+        save(this.state);
     }
 }
