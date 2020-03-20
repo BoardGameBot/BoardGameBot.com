@@ -4,30 +4,34 @@ import { MessagingEnvironment } from './MessagingEnvironment';
 import { simpleReply } from './util';
 
 export class MessageHandler {
-    name: String;
-    msg: Message;
-    state: Bot;
-    channel: GameChannel | undefined;
-    env: MessagingEnvironment;
+  name: String;
+  msg: Message;
+  state: Bot;
+  channel: GameChannel | undefined;
+  env: MessagingEnvironment;
 
-    constructor(state: Bot, msg: Message, env: MessagingEnvironment) {
-        this.msg = msg;
-        this.state = state;
-        this.channel = state.channels[msg.channel.id.value];
-        this.env = env;
-    }
+  constructor(state: Bot, msg: Message, env: MessagingEnvironment) {
+    this.msg = msg;
+    this.state = state;
+    this.channel = state.channels[msg.channel.id.value];
+    this.env = env;
+  }
 
-    // Whether or not this specific handler cares about this message.
-    public async handlesMessage(): Promise<boolean> { return Promise.resolve(false); }
+  // Whether or not this specific handler cares about this message.
+  public async handlesMessage(): Promise<boolean> {
+    return Promise.resolve(false);
+  }
 
-    // Reply to the message (will only be called when handlesMessage returns true).
-    public async reply(): Promise<Reply> { return Promise.resolve({ messages: [] }); }
+  // Reply to the message (will only be called when handlesMessage returns true).
+  public async reply(): Promise<Reply> {
+    return Promise.resolve({ messages: [] });
+  }
 
-    protected simpleReply(content: string): Reply {
-        return simpleReply(this.msg.channel.type, content);
-    };
+  protected simpleReply(content: string): Reply {
+    return simpleReply(this.msg.channel.type, content);
+  }
 
-    protected pvtReply(content: string): Reply {
-        return simpleReply(ChannelType.PVT, content);
-    }
-};
+  protected pvtReply(content: string): Reply {
+    return simpleReply(ChannelType.PVT, content);
+  }
+}

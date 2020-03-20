@@ -1,8 +1,9 @@
 export enum Namespace {
-    DISCORD, TELEGRAM
+  DISCORD,
+  TELEGRAM,
 }
 
 export interface Id {
-    namespace: Namespace;
-    value: string;
+  namespace: Namespace;
+  value: string;
 }

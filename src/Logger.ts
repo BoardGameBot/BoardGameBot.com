@@ -7,7 +7,7 @@ const colors = {
   DEBUG: chalk.cyan,
   INFO: chalk.blue,
   WARN: chalk.yellow,
-  ERROR: chalk.red
+  ERROR: chalk.red,
 };
 
 prefix.reg(logger);
@@ -67,7 +67,7 @@ export default class Logger {
     prefix.apply(this.logger, {
       format(level, _name, timestamp) {
         return `${chalk.gray(`[${timestamp}]`)} ${colors[level.toUpperCase()](level)} ${chalk.green(`${funcName}():`)}`;
-      }
+      },
     });
   }
 }

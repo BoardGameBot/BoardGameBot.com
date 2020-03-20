@@ -30,15 +30,16 @@ export function isVictory(cells: number[]) {
 }
 
 export interface TictactoeGameState {
-  cells: number[]
-};
+  cells: number[];
+}
 
 export const TictactoeGame: GameConfig = {
   name: 'tictactoe',
 
-  setup: () => ({
-    cells: Array(9).fill(null),
-  } as TictactoeGameState),
+  setup: () =>
+    ({
+      cells: Array(9).fill(null),
+    } as TictactoeGameState),
 
   moves: {
     clickCell(G: TictactoeGameState, ctx: any, id: number) {
@@ -52,7 +53,7 @@ export const TictactoeGame: GameConfig = {
   },
 
   turn: {
-    moveLimit: 1
+    moveLimit: 1,
   },
 
   endIf: (G: TictactoeGameState, ctx) => {
