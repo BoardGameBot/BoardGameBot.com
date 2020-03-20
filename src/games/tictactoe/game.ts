@@ -29,15 +29,19 @@ export function isVictory(cells: number[]) {
   return false;
 }
 
+export interface TictactoeGameState {
+  cells: number[]
+};
+
 export const TictactoeGame: GameConfig = {
   name: 'tictactoe',
 
   setup: () => ({
     cells: Array(9).fill(null),
-  }),
+  } as TictactoeGameState),
 
   moves: {
-    clickCell(G: any, ctx: any, id: number) {
+    clickCell(G: TictactoeGameState, ctx: any, id: number) {
       const cells = [...G.cells];
 
       if (cells[id] === null) {
@@ -48,15 +52,15 @@ export const TictactoeGame: GameConfig = {
   },
 
   turn: {
-      moveLimit: 1
+    moveLimit: 1
   },
 
-  endIf: (G, ctx) => {
+  endIf: (G: TictactoeGameState, ctx) => {
     if (isVictory(G.cells)) {
-    return { winner: ctx.currentPlayer };
+      return { winner: ctx.currentPlayer };
     }
     if (G.cells.filter((c: any) => c === null).length === 0) {
-    return { draw: true };
+      return { draw: true };
     }
   },
 };
