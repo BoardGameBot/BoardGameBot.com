@@ -7,20 +7,20 @@ import { GameDef } from '../games';
 import { save } from '../save';
 
 export class GameHandler extends MessageHandler {
-  gameDef: GameDef;
-  game: Client;
+    gameDef: GameDef;
+    game: Client;
 
-  constructor(state: Bot, msg: Message, env: MessagingEnvironment, gameDef: GameDef) {
-    super(state, msg, env);
-    this.game = Client({ game: gameDef.gameConfig });
-    const previousState = this.channel.currentGame.state;
-    if (previousState) {
-      this.game.overrideGameState(previousState);
+    constructor(state: Bot, msg: Message, env: MessagingEnvironment, gameDef: GameDef) {
+        super(state, msg, env);
+        this.game = Client({ game: gameDef.gameConfig });
+        const previousState = this.channel.currentGame.state;
+        if (previousState) {
+            this.game.overrideGameState(previousState);
+        }
     }
-  }
 
-  save() {
-    this.channel.currentGame.state = this.game.store.getState();
-    save(this.state);
-  }
+    async save() {
+        this.channel.currentGame.state = this.game.store.getState();
+        await save(this.state);
+    }
 }
