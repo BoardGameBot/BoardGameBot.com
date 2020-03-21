@@ -1,6 +1,7 @@
 import * as discord from 'discord.js';
 import { Namespace, Id } from '../id';
 import { Message, User, Channel, ChannelType, Mention, Reply, ReplyMessage } from '../messaging';
+import { MessageAttachment } from 'discord.js';
 
 function genId(value: string): Id {
   return { namespace: Namespace.DISCORD, value };
@@ -23,7 +24,11 @@ function sendMessageToChannel(channel: discord.Channel, message: ReplyMessage) {
     return;
   }
   const textChannel: discord.TextChannel = channel as discord.TextChannel;
-  textChannel.send(encodeMentions(message));
+  let attachment;
+  if (message.attachment) {
+    attachment = new MessageAttachment(message.attachment);
+  }
+  textChannel.send(encodeMentions(message), attachment);
 }
 
 function sendMessageToUser(user: discord.User, message: ReplyMessage) {

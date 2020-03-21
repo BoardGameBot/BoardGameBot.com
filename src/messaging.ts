@@ -34,6 +34,7 @@ export interface ReplyMessage {
   type: ChannelType;
   content: string;
   mentions?: Mention[];
+  attachment?: Buffer;
 }
 
 export interface Reply {

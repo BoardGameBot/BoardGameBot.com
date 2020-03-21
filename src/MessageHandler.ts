@@ -27,8 +27,8 @@ export class MessageHandler {
     return Promise.resolve({ messages: [] });
   }
 
-  protected simpleReply(content: string): Reply {
-    return simpleReply(this.msg.channel.type, content);
+  protected simpleReply(content: string, attachment?: Buffer): Reply {
+    return simpleReply(this.msg.channel.type, content, attachment);
   }
 
   protected pvtReply(content: string): Reply {
