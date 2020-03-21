@@ -37,13 +37,24 @@ export function equalId(id1: Id, id2: Id): boolean {
   return id1.namespace === id2.namespace && id1.value === id2.value;
 }
 
-export function simpleReply(type: ChannelType, content: string, attachment?: Buffer): Reply {
+export function simpleReply(type: ChannelType, content: string): Reply {
+  return {
+    messages: [
+      {
+        type,
+        content
+      },
+    ],
+  };
+}
+
+export function replyWithImage(type: ChannelType, content: string, image: Buffer): Reply {
   return {
     messages: [
       {
         type,
         content,
-        attachment
+        image
       },
     ],
   };

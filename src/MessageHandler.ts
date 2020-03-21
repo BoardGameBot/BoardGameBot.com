@@ -1,7 +1,7 @@
 import { Message, Reply, Channel, ChannelType } from './messaging';
 import { GameChannel, Bot } from './state';
 import { MessagingEnvironment } from './MessagingEnvironment';
-import { simpleReply } from './util';
+import { simpleReply, replyWithImage } from './util';
 
 export class MessageHandler {
   name: String;
@@ -27,8 +27,12 @@ export class MessageHandler {
     return Promise.resolve({ messages: [] });
   }
 
-  protected simpleReply(content: string, attachment?: Buffer): Reply {
-    return simpleReply(this.msg.channel.type, content, attachment);
+  protected simpleReply(content: string): Reply {
+    return simpleReply(this.msg.channel.type, content);
+  }
+
+  protected replyWithImage(content: string, image: Buffer): Reply {
+    return replyWithImage(this.msg.channel.type, content, image);
   }
 
   protected pvtReply(content: string): Reply {

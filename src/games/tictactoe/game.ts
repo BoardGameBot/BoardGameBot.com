@@ -1,6 +1,6 @@
 import { GameConfig } from 'boardgame.io/core';
 
-export function isVictory(cells: number[]) {
+export function isVictory(cells: string[]) {
   const positions = [
     [0, 1, 2],
     [3, 4, 5],
@@ -30,7 +30,7 @@ export function isVictory(cells: number[]) {
 }
 
 export interface TictactoeGameState {
-  cells: number[];
+  cells: string[];
 }
 
 export const TictactoeGame: GameConfig = {

@@ -25,8 +25,8 @@ function sendMessageToChannel(channel: discord.Channel, message: ReplyMessage) {
   }
   const textChannel: discord.TextChannel = channel as discord.TextChannel;
   let attachment;
-  if (message.attachment) {
-    attachment = new MessageAttachment(message.attachment);
+  if (message.image) {
+    attachment = new MessageAttachment(message.image);
   }
   textChannel.send(encodeMentions(message), attachment);
 }
