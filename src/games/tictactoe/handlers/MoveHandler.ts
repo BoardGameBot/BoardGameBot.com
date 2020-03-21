@@ -16,11 +16,15 @@ export default class MoveHandler extends GameHandler {
             return this.simpleReply('It is not your turn!');
         }
         const index = parseInt(splitMsg[1]);
+        const state = this.game.getState();
+        const cells = state.G.cells;
+        if (index < 0 || index >= cells.length || cells[index] !== null) {
+            return this.simpleReply('Invalid cell!');
+        }
         this.game.moves.clickCell(index);
 
         await this.save();
-        const state = this.game.getState();
-        return this.simpleReply(JSON.stringify(state.G.cells));
+        return this.simpleReply(JSON.stringify(this.game.getState().G.cells));
     }
 
     isValidCommand(splitMsg: string[]) {
