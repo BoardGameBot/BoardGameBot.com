@@ -1,5 +1,6 @@
 import { Message, Channel, User, Reply, ChannelType } from './messaging';
 import { Player, GameChannel } from './state';
+import { Id } from './id';
 
 export const PREFIX = '.';
 
@@ -30,6 +31,10 @@ export function convertUserToPlayer(user: User): Player {
     id: user.id,
     username: user.username,
   };
+}
+
+export function equalId(id1: Id, id2: Id): boolean {
+  return id1.namespace === id2.namespace && id1.value === id2.value;
 }
 
 export function simpleReply(type: ChannelType, content: string): Reply {

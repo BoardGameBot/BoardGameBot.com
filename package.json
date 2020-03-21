@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "debug-discord": "node -r ts-node/register --inspect src/discord/main.ts",
     "discord": "ts-node src/discord/main.ts",
     "format": "prettier --write \"./**/*.*(js|jsx|ts|tsx)\"",
     "format:check": "prettier --check \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"",

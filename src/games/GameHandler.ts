@@ -5,6 +5,7 @@ import { Message } from '../messaging';
 import { Client, GameConfig } from 'boardgame.io/client';
 import { GameDef } from '../games';
 import { save } from '../save';
+import { equalId } from '../util';
 
 export class GameHandler extends MessageHandler {
     gameDef: GameDef;
@@ -13,14 +14,28 @@ export class GameHandler extends MessageHandler {
     constructor(state: Bot, msg: Message, env: MessagingEnvironment, gameDef: GameDef) {
         super(state, msg, env);
         this.game = Client({ game: gameDef.gameConfig });
-        const previousState = this.channel.currentGame.state;
-        if (previousState) {
-            this.game.overrideGameState(previousState);
+        const gameState = this.channel.currentGame.state;
+        if (gameState) {
+            const action = {
+                type: 'SYNC',
+                state: gameState,
+                log: [],
+                clientOnly: true
+            };
+            this.game.store.dispatch(action);
         }
     }
 
+    isCurrentPlayer(): boolean {
+        const players = this.channel.currentGame.players;
+        const index = players.findIndex((player) => equalId(player.id, this.msg.author.id));
+        const currentPlayer = parseInt(this.game.getState().ctx.currentPlayer);
+        return currentPlayer === index;
+    }
+
     async save() {
-        this.channel.currentGame.state = this.game.store.getState();
+        const gameState = this.game.store.getState();
+        this.channel.currentGame.state = gameState;
         await save(this.state);
     }
 }
