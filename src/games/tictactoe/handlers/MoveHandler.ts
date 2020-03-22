@@ -2,6 +2,7 @@ import { GameHandler } from '../../GameHandler';
 import { isCommand } from '../../../util';
 import { TictactoeGameState } from '../game';
 import { BoardRenderer } from '../renderers/BoardRenderer';
+import { coordToIj, ijToCell, isValidCoord } from '../util';
 
 export default class MoveHandler extends GameHandler {
   async handlesMessage() {
@@ -16,7 +17,9 @@ export default class MoveHandler extends GameHandler {
     if (!this.isCurrentPlayer()) {
       return this.simpleReply('It is not your turn!');
     }
-    const index = parseInt(splitMsg[1]);
+    const coord = splitMsg[1].toUpperCase();
+    const [i, j] = coordToIj(coord);
+    const index = ijToCell(i, j);
     const state = this.game.getState();
     const cells = state.G.cells;
     if (index < 0 || index >= cells.length || cells[index] !== null) {
@@ -35,6 +38,6 @@ export default class MoveHandler extends GameHandler {
   }
 
   isValidCommand(splitMsg: string[]) {
-    return splitMsg.length === 2 && parseInt(splitMsg[1]) >= 0;
+    return splitMsg.length === 2 && isValidCoord(splitMsg[1]);
   }
 }
