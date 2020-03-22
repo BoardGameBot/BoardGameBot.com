@@ -2,6 +2,7 @@ import { MessageHandler } from '../MessageHandler';
 import { isCommand } from '../util';
 import { save } from '../save';
 import { Reply } from '../messaging';
+import { GAMES_MAP } from '../games';
 
 export default class AcceptHandler extends MessageHandler {
   name = 'Accept';
@@ -50,6 +51,8 @@ export default class AcceptHandler extends MessageHandler {
     };
     await save(this.state);
     const playersUsernames = players.map(player => player.username).join(', ');
-    return this.simpleReply(`A ${gameCode} match is starting with ${playersUsernames}!`);
+    const gameDef = GAMES_MAP[gameCode];
+    const initialHandler = new gameDef.initialHandler(this.state, this.msg, this.env, gameDef);
+    return initialHandler.reply();
   }
 }

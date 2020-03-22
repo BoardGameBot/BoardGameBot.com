@@ -13,6 +13,7 @@ export interface GameDef {
   minPlayers: number;
   maxPlayers: number;
   gameConfig: GameConfig;
+  initialHandler: typeof GameHandler;
   handlers: typeof GameHandler[];
 }
 
