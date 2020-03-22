@@ -56,7 +56,7 @@ export function replyWithImage(type: ChannelType, content: string, image: Buffer
         type,
         content,
         image,
-        mentions
+        mentions,
       },
     ],
   };

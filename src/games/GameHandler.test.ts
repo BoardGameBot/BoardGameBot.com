@@ -41,7 +41,7 @@ describe('Game Handler', () => {
     };
     const handler = new GameHandler(state, msg, env, GAMES_MAP['tictactoe']);
 
-    const result = handler.getPlayerFromIndex("1");
+    const result = handler.getPlayerFromIndex('1');
 
     expect(result).toEqual(alice);
   });

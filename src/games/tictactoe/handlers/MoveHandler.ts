@@ -37,11 +37,11 @@ export default class MoveHandler extends GameHandler {
     let mentions: Mention[] = [{ user: currentPlayer, wordIndex: 3 }];
     if (state.ctx.gameover && state.ctx.gameover.winner) {
       const winner = this.getPlayerFromIndex(state.ctx.gameover.winner);
-      content = "@username wins!"
+      content = '@username wins!';
       mentions = [{ user: winner, wordIndex: 0 }];
       await this.endGame();
     } else if (state.ctx.gameover && state.ctx.gameover.draw) {
-      content = "It is a draw! Nobody wins."
+      content = 'It is a draw! Nobody wins.';
       mentions = [];
       await this.endGame();
     }
