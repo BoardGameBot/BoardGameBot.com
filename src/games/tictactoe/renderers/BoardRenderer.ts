@@ -1,67 +1,86 @@
-import { TictactoeGameState } from "../game";
+import { TictactoeGameState } from '../game';
 import { createCanvas, Canvas } from 'canvas';
 import rough from 'roughjs';
-import { RoughCanvas } from "roughjs/bin/canvas";
+import { RoughCanvas } from 'roughjs/bin/canvas';
+import { ijToCoord } from '../util';
+import { fillBackground } from '../../../util';
 
 export class BoardRenderer {
-    canvas: Canvas;
-    roughCanvas: RoughCanvas;
+  canvas: Canvas;
+  roughCanvas: RoughCanvas;
+  seed: number;
 
-    constructor() {
-        this.canvas = createCanvas(300, 300);
-        this.roughCanvas = rough.canvas(this.canvas as any);
-    }
+  constructor(seed?: number) {
+    this.seed = seed ? seed : rough.newSeed();
+    this.canvas = createCanvas(300, 300);
+    this.roughCanvas = rough.canvas(this.canvas as any, { options: { seed: this.seed } });
+  }
 
-    render(state: TictactoeGameState) {
-        this.drawInitialLines();
-        this.drawCells(state);
-        return this.canvas.toBuffer();
-    }
+  render(state: TictactoeGameState) {
+    fillBackground(this.canvas);
+    this.drawInitialLines();
+    this.drawCells(state);
+    return this.canvas.toBuffer();
+  }
 
-    drawInitialLines() {
-        this.roughCanvas.line(100, 0, 100, 300, { strokeWidth: 2 });
-        this.roughCanvas.line(200, 0, 200, 300, { strokeWidth: 2 });
-        this.roughCanvas.line(0, 100, 300, 100, { strokeWidth: 2 });
-        this.roughCanvas.line(0, 200, 300, 200, { strokeWidth: 2 });
-        this.roughCanvas.line(0, 100, 300, 100, { strokeWidth: 2 });
-    }
+  drawInitialLines() {
+    this.roughCanvas.line(100, 5, 100, 295, { strokeWidth: 2 });
+    this.roughCanvas.line(200, 5, 200, 295, { strokeWidth: 2 });
+    this.roughCanvas.line(5, 100, 295, 100, { strokeWidth: 2 });
+    this.roughCanvas.line(5, 200, 295, 200, { strokeWidth: 2 });
+    this.roughCanvas.line(5, 100, 295, 100, { strokeWidth: 2 });
+  }
 
-    drawCells(state: TictactoeGameState) {
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                const index = 3 * j + i;
-                if (state.cells[index] === '0') {
-                    this.drawCross(i, j);
-                } else if (state.cells[index] === '1') {
-                    this.drawCircle(i, j);
-                }
-            }
+  drawCells(state: TictactoeGameState) {
+    const canvasCtx = this.canvas.getContext('2d');
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const index = 3 * j + i;
+        canvasCtx.save();
+        canvasCtx.translate(100 * i + 50, 100 * j + 50);
+        if (state.cells[index] === '0') {
+          this.drawCross(80);
+        } else if (state.cells[index] === '1') {
+          this.drawCircle(80);
+        } else {
+          this.drawCoord(canvasCtx, ijToCoord(i, j));
         }
+        canvasCtx.restore();
+      }
     }
+  }
 
-    drawCross(i: number, j: number) {
-        this.roughCanvas.line(
-            i * 100,       // x
-            j * 100,       // y
-            (i + 1) * 100, // width
-            (j + 1) * 100, // height
-            { stroke: 'red', strokeWidth: 3 }
-        );
-        this.roughCanvas.line(
-            i * 100,       // x
-            (j + 1) * 100, // y 
-            (i + 1) * 100,      // width
-            j * 100,            // height
-            { stroke: 'red', strokeWidth: 3 }
-        );
-    }
+  drawCross(size: number) {
+    this.roughCanvas.line(
+      -0.5 * size, // x1
+      -0.5 * size, // y1
+      0.5 * size, // x2
+      0.5 * size, // y2
+      { stroke: 'red', strokeWidth: 0.05 * size },
+    );
+    this.roughCanvas.line(
+      0.5 * size, // x1
+      -0.5 * size, // y1
+      -0.5 * size, // x2
+      0.5 * size, // y2
+      { stroke: 'red', strokeWidth: 0.05 * size },
+    );
+  }
 
-    drawCircle(i: number, j: number) {
-        this.roughCanvas.circle(
-            (i + 0.5) * 100, // x
-            (j + 0.5) * 100, // y 
-            75,              // diameter
-            { stroke: 'green', strokeWidth: 5 }
-        );
-    }
+  drawCircle(size: number) {
+    this.roughCanvas.circle(
+      0, // x
+      0, // y
+      size, // diameter
+      { stroke: 'green', strokeWidth: 0.05 * size },
+    );
+  }
+
+  drawCoord(canvasCtx, coord: string) {
+    canvasCtx.font = '30px Comic Sans MS';
+    canvasCtx.fillStyle = 'grey';
+    canvasCtx.textAlign = 'center';
+    canvasCtx.textBaseline = 'middle';
+    canvasCtx.fillText(coord, 0, 0);
+  }
 }

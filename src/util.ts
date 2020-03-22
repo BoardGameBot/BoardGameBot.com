@@ -1,6 +1,7 @@
 import { Message, Channel, User, Reply, ChannelType } from './messaging';
 import { Player, GameChannel } from './state';
 import { Id } from './id';
+import { Canvas } from 'canvas';
 
 export const PREFIX = '.';
 
@@ -42,7 +43,7 @@ export function simpleReply(type: ChannelType, content: string): Reply {
     messages: [
       {
         type,
-        content
+        content,
       },
     ],
   };
@@ -54,8 +55,14 @@ export function replyWithImage(type: ChannelType, content: string, image: Buffer
       {
         type,
         content,
-        image
+        image,
       },
     ],
   };
+}
+
+export function fillBackground(canvas: Canvas) {
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#36393F';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

@@ -5,8 +5,8 @@ const FILEPATH = __dirname + '/../bot.json';
 const DEFAULT_STATE: Bot = { channels: {} };
 
 export async function save(state: Bot) {
-    const data = JSON.stringify(state, null, 2);
-    await fs.promises.writeFile(FILEPATH, data);
+  const data = JSON.stringify(state, null, 2);
+  await fs.promises.writeFile(FILEPATH, data);
 }
 
 export function load(): Bot {
