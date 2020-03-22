@@ -74,7 +74,7 @@ export class BoardRenderer {
       0, // x
       0, // y
       size, // diameter
-      { stroke: 'green', strokeWidth},
+      { stroke: 'green', strokeWidth },
     );
   }
 
