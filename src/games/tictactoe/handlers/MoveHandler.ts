@@ -1,5 +1,6 @@
 import { GameHandler } from '../../GameHandler';
 import { isCommand } from '../../../util';
+import { Mention } from '../../../messaging';
 import { TictactoeGameState } from '../game';
 import { BoardRenderer } from '../renderers/BoardRenderer';
 import { coordToIj, ijToCell, isValidCoord } from '../util';
@@ -27,14 +28,27 @@ export default class MoveHandler extends GameHandler {
     }
     this.game.moves.clickCell(index);
     await this.save();
-    return this.renderBoard();
+    return this.render();
   }
 
-  renderBoard() {
+  async render() {
     const state = this.game.getState();
+    const currentPlayer = this.getPlayerFromIndex(state.ctx.currentPlayer);
+    let content = "Done. It is @username turn's now! Use: .move <<CELL>>";
+    let mentions: Mention[] = [{ user: currentPlayer, wordIndex: 3 }];
+    if (state.ctx.gameover && state.ctx.gameover.winner) {
+      const winner = this.getPlayerFromIndex(state.ctx.gameover.winner);
+      content = "@username wins!"
+      mentions = [{ user: winner, wordIndex: 0 }];
+      await this.endGame();
+    } else if (state.ctx.gameover && state.ctx.gameover.draw) {
+      content = "It is a draw! Nobody wins."
+      mentions = [];
+      await this.endGame();
+    }
     const renderer = new BoardRenderer();
     const img = renderer.render(state.G);
-    return this.replyWithImage(JSON.stringify(state.G.cells), img);
+    return this.replyWithImage(content, img, mentions);
   }
 
   isValidCommand(splitMsg: string[]) {

@@ -1,4 +1,4 @@
-import { Message, Channel, User, Reply, ChannelType } from './messaging';
+import { Message, Channel, User, Reply, ChannelType, Mention } from './messaging';
 import { Player, GameChannel } from './state';
 import { Id } from './id';
 import { Canvas } from 'canvas';
@@ -49,13 +49,14 @@ export function simpleReply(type: ChannelType, content: string): Reply {
   };
 }
 
-export function replyWithImage(type: ChannelType, content: string, image: Buffer): Reply {
+export function replyWithImage(type: ChannelType, content: string, image: Buffer, mentions?: Mention[]): Reply {
   return {
     messages: [
       {
         type,
         content,
         image,
+        mentions
       },
     ],
   };

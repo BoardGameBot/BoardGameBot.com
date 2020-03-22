@@ -33,6 +33,19 @@ describe('Game Handler', () => {
     expect(isCurrentPlayer).toEqual(true);
   });
 
+  test('getPlayerFromId', async () => {
+    state.channels['#foo'].currentGame = {
+      gameCode: 'tictactoe',
+      creator: bob,
+      players: [bob, alice],
+    };
+    const handler = new GameHandler(state, msg, env, GAMES_MAP['tictactoe']);
+
+    const result = handler.getPlayerFromIndex("1");
+
+    expect(result).toEqual(alice);
+  });
+
   test('state loaded', async () => {
     const mockState = { foo: 'bar' };
     state.channels['#foo'].currentGame = {

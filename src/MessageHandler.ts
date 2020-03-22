@@ -1,4 +1,4 @@
-import { Message, Reply, Channel, ChannelType } from './messaging';
+import { Message, Reply, Mention, ChannelType } from './messaging';
 import { GameChannel, Bot } from './state';
 import { MessagingEnvironment } from './MessagingEnvironment';
 import { simpleReply, replyWithImage } from './util';
@@ -31,8 +31,8 @@ export class MessageHandler {
     return simpleReply(this.msg.channel.type, content);
   }
 
-  protected replyWithImage(content: string, image: Buffer): Reply {
-    return replyWithImage(this.msg.channel.type, content, image);
+  protected replyWithImage(content: string, image: Buffer, mentions?: Mention[]): Reply {
+    return replyWithImage(this.msg.channel.type, content, image, mentions);
   }
 
   protected pvtReply(content: string): Reply {
