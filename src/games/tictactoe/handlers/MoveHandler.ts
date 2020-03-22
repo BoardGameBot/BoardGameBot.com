@@ -1,8 +1,7 @@
 import { GameHandler } from '../../GameHandler';
 import { isCommand } from '../../../util';
-import { TictactoeGameState } from '../game';
 import { BoardRenderer } from '../renderers/BoardRenderer';
-import { coordToIj, ijToCell, isValidCoord } from '../util';
+import { coordToCell, isValidCoord } from '../util';
 
 export default class MoveHandler extends GameHandler {
   async handlesMessage() {
@@ -18,22 +17,21 @@ export default class MoveHandler extends GameHandler {
       return this.simpleReply('It is not your turn!');
     }
     const coord = splitMsg[1].toUpperCase();
-    const [i, j] = coordToIj(coord);
-    const index = ijToCell(i, j);
+    const cell = coordToCell(coord);
     const state = this.game.getState();
     const cells = state.G.cells;
-    if (index < 0 || index >= cells.length || cells[index] !== null) {
+    if (cell < 0 || cell >= cells.length || cells[cell] !== null) {
       return this.simpleReply('Invalid cell!');
     }
-    this.game.moves.clickCell(index);
+    this.game.moves.clickCell(cell);
     await this.save();
-    return this.renderBoard();
+    return this.renderBoard(cell);
   }
 
-  renderBoard() {
+  renderBoard(lastPlayedCell?: number) {
     const state = this.game.getState();
     const renderer = new BoardRenderer();
-    const img = renderer.render(state.G);
+    const img = renderer.render(state.G, lastPlayedCell);
     return this.replyWithImage(JSON.stringify(state.G.cells), img);
   }
 

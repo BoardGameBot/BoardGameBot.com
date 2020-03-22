@@ -1,4 +1,4 @@
-import { ijToCoord, coordToIj, ijToCell, isValidCoord } from './util';
+import { ijToCoord, coordToCell, isValidCoord } from './util';
 
 describe('TicTacToe Util', () => {
   it('should give correct coordinate from ij', () => {
@@ -6,11 +6,7 @@ describe('TicTacToe Util', () => {
   });
 
   it('should give correct i/j from coordinate', () => {
-    expect(coordToIj('B1')).toEqual([0, 1]);
-  });
-
-  it('should give correct cell from i/j', () => {
-    expect(ijToCell(0, 1)).toEqual(3);
+    expect(coordToCell('B1')).toEqual(3);
   });
 
   it('is a valid coord', () => {

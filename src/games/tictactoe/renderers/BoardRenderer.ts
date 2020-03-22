@@ -16,10 +16,10 @@ export class BoardRenderer {
     this.roughCanvas = rough.canvas(this.canvas as any, { options: { seed: this.seed } });
   }
 
-  render(state: TictactoeGameState) {
+  render(state: TictactoeGameState, lastPlayedCell?: number) {
     fillBackground(this.canvas);
     this.drawInitialLines();
-    this.drawCells(state);
+    this.drawCells(state, lastPlayedCell);
     return this.canvas.toBuffer();
   }
 
@@ -31,7 +31,7 @@ export class BoardRenderer {
     this.roughCanvas.line(5, 100, 295, 100, { strokeWidth: 2 });
   }
 
-  drawCells(state: TictactoeGameState) {
+  drawCells(state: TictactoeGameState, lastPlayedCell?: number) {
     const canvasCtx = this.canvas.getContext('2d');
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -39,9 +39,9 @@ export class BoardRenderer {
         canvasCtx.save();
         canvasCtx.translate(100 * i + 50, 100 * j + 50);
         if (state.cells[index] === '0') {
-          this.drawCross(80);
+          this.drawCross(80, index === lastPlayedCell);
         } else if (state.cells[index] === '1') {
-          this.drawCircle(80);
+          this.drawCircle(80, index === lastPlayedCell);
         } else {
           this.drawCoord(canvasCtx, ijToCoord(i, j));
         }
@@ -50,29 +50,31 @@ export class BoardRenderer {
     }
   }
 
-  drawCross(size: number) {
+  drawCross(size: number, lastPlayedCell: boolean) {
+    const strokeWidth = lastPlayedCell ? 0.12 * size : 0.05 * size;
     this.roughCanvas.line(
       -0.5 * size, // x1
       -0.5 * size, // y1
       0.5 * size, // x2
       0.5 * size, // y2
-      { stroke: 'red', strokeWidth: 0.05 * size },
+      { stroke: 'red', strokeWidth },
     );
     this.roughCanvas.line(
       0.5 * size, // x1
       -0.5 * size, // y1
       -0.5 * size, // x2
       0.5 * size, // y2
-      { stroke: 'red', strokeWidth: 0.05 * size },
+      { stroke: 'red', strokeWidth },
     );
   }
 
-  drawCircle(size: number) {
+  drawCircle(size: number, lastPlayedCell: boolean) {
+    const strokeWidth = lastPlayedCell ? 0.12 * size : 0.05 * size;
     this.roughCanvas.circle(
       0, // x
       0, // y
       size, // diameter
-      { stroke: 'green', strokeWidth: 0.05 * size },
+      { stroke: 'green', strokeWidth},
     );
   }
 
