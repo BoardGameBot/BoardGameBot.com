@@ -114,7 +114,7 @@ describe('Accept Handler', () => {
       const result = await handler.reply();
 
       expect(save).toHaveBeenCalled();
-      expect(result.messages[0].content).toContain('match is starting');
+      expect(result.messages[0].content).toContain('is starting');
     });
   });
 });
