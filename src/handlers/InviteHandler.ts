@@ -51,7 +51,11 @@ export default class InviteHandler extends MessageHandler {
 
   private checkValidGame(gameCode: string): MaybeReply {
     if (!(gameCode in GAMES_MAP)) {
-      return this.simpleReply('Invalid game. Check https://boardgamebot.com/games to see list of games.');
+      const humanReadableGames = Object.keys(GAMES_MAP).join(',');
+      return this.simpleReply(
+        'Invalid game. Check https://boardgamebot.com/games to see a list of games.\nAvailable games: ' +
+          humanReadableGames,
+      );
     }
   }
 
