@@ -41,7 +41,11 @@ export default class InviteHandler extends MessageHandler {
 
   private checkNumberOfArguments(args: String[]): MaybeReply {
     if (args.length < 3) {
-      return this.simpleReply('Not enough arguments. Correct usage: ".invite GAME @PLAYER1 @PLAYER2..."');
+      const humanReadableGames = Object.keys(GAMES_MAP).join(',');
+      return this.simpleReply(
+        'Not enough arguments. Correct usage: ".invite GAME @PLAYER1 @PLAYER2..."\nAvailable games: ' +
+          humanReadableGames,
+      );
     }
   }
 
