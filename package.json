@@ -9,6 +9,7 @@
     "format:check": "prettier --check \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "autopre": "run-s format test:coverage",
     "pre": "run-s format:check test:coverage",
     "coveralls": "cat coverage/lcov.info | node node_modules/.bin/coveralls"
   },
