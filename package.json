@@ -5,6 +5,7 @@
   "scripts": {
     "debug-discord": "node -r ts-node/register --inspect src/discord/main.ts",
     "discord": "ts-node src/discord/main.ts",
+    "discord:dev": "nodemon -e js,ts --exec 'cp desiredstate.json bot.json ; yarn run ts-node --transpile-only src/discord/main.ts'",
     "format": "prettier --write \"./**/*.*(js|jsx|ts|tsx)\"",
     "format:check": "prettier --check \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"",
     "lint": "eslint --max-warnings=0 --ext .js,.ts src/",
