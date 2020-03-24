@@ -4,21 +4,21 @@ export enum Color {
   YELLOW,
   BLACK,
   BLUE,
-  GREEN
-};
+  GREEN,
+}
 
 export interface BoardTemplate {
-  template: Color[][] // 5x5 board template
+  template: Color[][]; // 5x5 board template
 }
 
 export interface BoardRow {
   size: number;
-  pieces: Color[]
+  pieces: Color[];
 }
 
 export interface Board {
   rows: BoardRow[];
-  board: Color[][] // 5x5 board
+  board: Color[][]; // 5x5 board
 }
 
 export interface Bucket {
@@ -31,30 +31,30 @@ export interface Bucket {
 }
 
 export interface MosaicGameState {
-  boards: Board[],
-  boardTemplate: BoardTemplate,
-  bag: Bucket,
+  boards: Board[];
+  boardTemplate: BoardTemplate;
+  bag: Bucket;
   // Players | # Buckets
   // --------|----------
   // 2       | 5
   // 3       | 7
   // 4       | 9
-  buckets: Bucket[],
-  centerBucket: Bucket,
-  points: number[]
+  buckets: Bucket[];
+  centerBucket: Bucket;
+  points: number[];
 }
 
-export const DEFAULT_TEMPLATE:BoardTemplate = {
-    template: [
-        [Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN],
-        [Color.GREEN, Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK],
-        [Color.BLACK, Color.GREEN, Color.BLUE, Color.YELLOW, Color.RED],
-        [Color.RED, Color.BLACK, Color.GREEN, Color.BLUE, Color.YELLOW],
-        [Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN, Color.BLUE],
-    ]
+export const DEFAULT_TEMPLATE: BoardTemplate = {
+  template: [
+    [Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN],
+    [Color.GREEN, Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK],
+    [Color.BLACK, Color.GREEN, Color.BLUE, Color.YELLOW, Color.RED],
+    [Color.RED, Color.BLACK, Color.GREEN, Color.BLUE, Color.YELLOW],
+    [Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN, Color.BLUE],
+  ],
 };
 
-export const DEFAULT_BOARD:Board = {
+export const DEFAULT_BOARD: Board = {
   rows: [
     { size: 1, pieces: [Color.NONE] },
     { size: 2, pieces: [Color.NONE, Color.NONE] },
@@ -63,18 +63,18 @@ export const DEFAULT_BOARD:Board = {
     { size: 5, pieces: [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE] },
   ],
   board: [
-      [ Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE ],
-      [ Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE ],
-      [ Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE ],
-      [ Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE ],
-      [ Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE ],
-  ]
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+  ],
 };
 
-export const DEFAULT_BAG:Bucket = {
+export const DEFAULT_BAG: Bucket = {
   red: 20,
   yellow: 20,
   black: 20,
   blue: 20,
-  green: 20
+  green: 20,
 };
