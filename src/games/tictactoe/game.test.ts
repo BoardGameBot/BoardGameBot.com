@@ -29,7 +29,7 @@ describe('TicTacToe game rules', () => {
     // the board should look like this now
     expect(G.cells).toEqual(['0', '0', null, '1', '1', '1', null, null, '0']);
     // player '1' should be declared the winner
-    expect(ctx.gameover).toEqual({ winner: '1' });
+    expect(ctx.gameover).toEqual({ winner: '1', winningCells: [3, 4, 5] });
   });
 
   it('should declare a draw', () => {

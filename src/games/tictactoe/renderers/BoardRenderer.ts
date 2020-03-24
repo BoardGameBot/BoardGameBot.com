@@ -16,10 +16,10 @@ export class BoardRenderer {
     this.roughCanvas = rough.canvas(this.canvas as any, { options: { seed: this.seed } });
   }
 
-  render(state: TictactoeGameState, lastPlayedCell?: number) {
+  render(state: TictactoeGameState, lastPlayedCell?: number, winningCells?: number[]) {
     fillBackground(this.canvas);
     this.drawInitialLines();
-    this.drawCells(state, lastPlayedCell);
+    this.drawCells(state, lastPlayedCell, winningCells);
     return this.canvas.toBuffer();
   }
 
@@ -31,17 +31,18 @@ export class BoardRenderer {
     this.roughCanvas.line(5, 100, 295, 100, { strokeWidth: 2 });
   }
 
-  drawCells(state: TictactoeGameState, lastPlayedCell?: number) {
+  drawCells(state: TictactoeGameState, lastPlayedCell?: number, winningCells?: number[]) {
     const canvasCtx = this.canvas.getContext('2d');
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         const index = 3 * j + i;
+        const boldCell = index === lastPlayedCell || (winningCells && winningCells.includes(index));
         canvasCtx.save();
         canvasCtx.translate(100 * i + 50, 100 * j + 50);
         if (state.cells[index] === '0') {
-          this.drawCross(80, index === lastPlayedCell);
+          this.drawCross(80, boldCell);
         } else if (state.cells[index] === '1') {
-          this.drawCircle(80, index === lastPlayedCell);
+          this.drawCircle(80, boldCell);
         } else {
           this.drawCoord(canvasCtx, ijToCoord(i, j));
         }

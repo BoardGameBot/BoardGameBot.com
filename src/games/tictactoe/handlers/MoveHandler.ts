@@ -35,8 +35,10 @@ export default class MoveHandler extends GameHandler {
     const currentPlayer = this.getPlayerFromIndex(state.ctx.currentPlayer);
     let content = "Done. It is @username turn's now! Use: .move <<CELL>>";
     let mentions: Mention[] = [{ user: currentPlayer, wordIndex: 3 }];
+    let winningCells;
     if (state.ctx.gameover && state.ctx.gameover.winner) {
       const winner = this.getPlayerFromIndex(state.ctx.gameover.winner);
+      winningCells = state.ctx.gameover.winningCells;
       content = '@username wins!';
       mentions = [{ user: winner, wordIndex: 0 }];
       await this.endGame();
@@ -46,7 +48,7 @@ export default class MoveHandler extends GameHandler {
       await this.endGame();
     }
     const renderer = new BoardRenderer();
-    const img = renderer.render(state.G, lastPlayedCell);
+    const img = renderer.render(state.G, lastPlayedCell, winningCells);
     return this.replyWithImage(content, img, mentions);
   }
 
