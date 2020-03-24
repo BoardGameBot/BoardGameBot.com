@@ -8,7 +8,7 @@ export interface Player {
 
 export interface Game {
   gameCode: string;
-  state?: Object;
+  state?: Object; // eslint-disable-line @typescript-eslint/ban-types
   creator: Player;
   players: Player[];
 }

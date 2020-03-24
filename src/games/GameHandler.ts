@@ -2,7 +2,7 @@ import { MessageHandler } from '../MessageHandler';
 import { MessagingEnvironment } from '../MessagingEnvironment';
 import { Bot, Player } from '../state';
 import { Message } from '../messaging';
-import { Client, GameConfig } from 'boardgame.io/client';
+import { Client } from 'boardgame.io/client';
 import { GameDef } from '../games';
 import { save } from '../save';
 import { equalId } from '../util';

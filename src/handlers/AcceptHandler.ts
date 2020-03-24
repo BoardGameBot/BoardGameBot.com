@@ -26,7 +26,7 @@ export default class AcceptHandler extends MessageHandler {
     return this.accept(playerIds, acceptedIds);
   }
 
-  async accept(playerIds: String[], acceptedIds: String[]): Promise<Reply> {
+  async accept(playerIds: string[], acceptedIds: string[]): Promise<Reply> {
     const remaining = new Set(playerIds).size - new Set(acceptedIds).size;
     if (remaining === 1) {
       return this.startGame();
@@ -50,7 +50,6 @@ export default class AcceptHandler extends MessageHandler {
       creator: players[0],
     };
     await save(this.state);
-    const playersUsernames = players.map(player => player.username).join(', ');
     const gameDef = GAMES_MAP[gameCode];
     const initialHandler = new gameDef.initialHandler(this.state, this.msg, this.env, gameDef);
     return initialHandler.reply();

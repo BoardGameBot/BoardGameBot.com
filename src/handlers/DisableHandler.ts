@@ -1,5 +1,5 @@
 import { MessageHandler } from '../MessageHandler';
-import { isCommand, simpleReply } from '../util';
+import { isCommand } from '../util';
 import { save } from '../save';
 import { Reply } from '../messaging';
 

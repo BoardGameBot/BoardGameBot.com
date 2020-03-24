@@ -1,5 +1,4 @@
 jest.mock('../../../save');
-import { save } from '../../../save';
 import MoveHandler from './MoveHandler';
 import { setActiveChannel, defaultState, createPublicChannelMock, createUserMock } from '../../../testing/mockUtil';
 import FakeMessagingEnvironment from '../../../testing/FakeMessagingEnvironment';
