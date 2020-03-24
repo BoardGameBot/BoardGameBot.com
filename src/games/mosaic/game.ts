@@ -11,14 +11,9 @@ export interface BoardTemplate {
   template: Color[][]; // 5x5 board template
 }
 
-export interface BoardRow {
-  size: number;
-  pieces: Color[];
-}
-
 export interface Board {
-  rows: BoardRow[];
-  board: Color[][]; // 5x5 board
+  rows: Color[][]; // 5x5 lower triangular matrix
+  board: Color[][]; // 5x5 board template
 }
 
 export interface Bucket {
@@ -41,7 +36,7 @@ export interface MosaicGameState {
   // 4       | 9
   buckets: Bucket[];
   centerBucket: Bucket;
-  points: number[];
+  points: number[]; // Length is the # of players
 }
 
 export const DEFAULT_TEMPLATE: BoardTemplate = {
@@ -56,11 +51,11 @@ export const DEFAULT_TEMPLATE: BoardTemplate = {
 
 export const DEFAULT_BOARD: Board = {
   rows: [
-    { size: 1, pieces: [Color.NONE] },
-    { size: 2, pieces: [Color.NONE, Color.NONE] },
-    { size: 3, pieces: [Color.NONE, Color.NONE, Color.NONE] },
-    { size: 4, pieces: [Color.NONE, Color.NONE, Color.NONE, Color.NONE] },
-    { size: 5, pieces: [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE] },
+    [Color.NONE],
+    [Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+    [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
   ],
   board: [
     [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
