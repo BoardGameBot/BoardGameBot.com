@@ -22,11 +22,10 @@ export function isVictory(cells: string[]) {
       }
     }
     if (winner != null) {
-      return true;
+      return pos;
     }
   }
-
-  return false;
+  return null;
 }
 
 export interface TictactoeGameState {
@@ -57,8 +56,9 @@ export const TictactoeGame: GameConfig = {
   },
 
   endIf: (G: TictactoeGameState, ctx) => {
-    if (isVictory(G.cells)) {
-      return { winner: ctx.currentPlayer };
+    const victory = isVictory(G.cells);
+    if (victory) {
+      return { winner: ctx.currentPlayer, winningCells: victory };
     }
     if (G.cells.filter((c: any) => c === null).length === 0) {
       return { draw: true };
