@@ -4,7 +4,7 @@ import { MessagingEnvironment } from './MessagingEnvironment';
 import { simpleReply, replyWithImage } from './util';
 
 export class MessageHandler {
-  name: String;
+  name: string;
   msg: Message;
   state: Bot;
   channel: GameChannel | undefined;

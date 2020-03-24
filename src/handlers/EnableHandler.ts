@@ -1,5 +1,5 @@
 import { MessageHandler } from '../MessageHandler';
-import { isRawCommand, simpleReply } from '../util';
+import { isRawCommand } from '../util';
 import { save } from '../save';
 import { ChannelType, Reply } from '../messaging';
 

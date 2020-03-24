@@ -1,7 +1,6 @@
 import { GameHandler } from '../../GameHandler';
 import { isCommand } from '../../../util';
 import { Mention } from '../../../messaging';
-import { TictactoeGameState } from '../game';
 import { BoardRenderer } from '../renderers/BoardRenderer';
 import { coordToCell, isValidCoord } from '../util';
 

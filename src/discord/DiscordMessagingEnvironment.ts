@@ -1,5 +1,5 @@
 import { MessagingEnvironment } from '../MessagingEnvironment';
-import { Client, Guild } from 'discord.js';
+import { Client } from 'discord.js';
 import { User, Channel } from '../messaging';
 import assert from 'assert';
 import { Namespace } from '../id';

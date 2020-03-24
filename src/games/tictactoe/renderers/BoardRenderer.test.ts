@@ -1,5 +1,4 @@
 import { BoardRenderer } from './BoardRenderer';
-import * as fs from 'fs';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 describe('TicTacToe BoardRenderer', () => {
