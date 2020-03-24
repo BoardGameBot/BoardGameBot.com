@@ -3,23 +3,45 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "debug-discord": "node -r ts-node/register --inspect src/discord/main.ts",
     "discord": "ts-node src/discord/main.ts",
-    "test": "jest"
+    "discord:dev": "nodemon -e js,ts --exec 'cp desiredstate.json bot.json ; yarn run ts-node --transpile-only src/discord/main.ts'",
+    "format": "prettier --write \"./**/*.*(js|jsx|ts|tsx)\"",
+    "format:check": "prettier --check \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"",
+    "lint": "eslint --max-warnings=0 --ext .js,.ts src/",
+    "lint:fix": "eslint --fix --ext .js,.ts src/",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "autopre": "run-s lint:fix format test:coverage",
+    "pre": "run-s lint format:check test:coverage",
+    "coveralls": "cat coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^13.7.4",
+    "boardgame.io": "^0.38.1",
+    "canvas": "^2.6.1",
     "discord.js": "^12.0.1",
     "dotenv": "^8.2.0",
+    "jest-image-snapshot": "^2.12.0",
     "loglevel": "^1.6.7",
     "loglevel-plugin-prefix": "^0.8.4",
+    "npm-run-all": "^4.1.5",
+    "roughjs": "^4.0.4",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.2"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
     "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
     "ts-jest": "^25.2.1"
   }
 }

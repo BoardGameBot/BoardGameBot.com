@@ -1,7 +1,8 @@
 import { User, Channel } from './messaging';
 
 export class MessagingEnvironment {
-    async isAdmin(user: User, channel: Channel) {
-        return false;
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async isAdmin(user: User, channel: Channel) {
+    return false;
+  }
 }
