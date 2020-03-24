@@ -41,20 +41,18 @@ export default class InviteHandler extends MessageHandler {
 
   private checkNumberOfArguments(args: String[]): MaybeReply {
     if (args.length < 3) {
-      const humanReadableGames = Object.keys(GAMES_MAP).join(',');
       return this.simpleReply(
         'Not enough arguments. Correct usage: ".invite GAME @PLAYER1 @PLAYER2..."\nAvailable games: ' +
-          humanReadableGames,
+          this.getHumanReadableGamesList(),
       );
     }
   }
 
   private checkValidGame(gameCode: string): MaybeReply {
     if (!(gameCode in GAMES_MAP)) {
-      const humanReadableGames = Object.keys(GAMES_MAP).join(',');
       return this.simpleReply(
         'Invalid game. Check https://boardgamebot.com/games to see a list of games.\nAvailable games: ' +
-          humanReadableGames,
+          this.getHumanReadableGamesList(),
       );
     }
   }
@@ -71,6 +69,10 @@ export default class InviteHandler extends MessageHandler {
     if (users.length <= 1) {
       return this.simpleReply('Not enough users to play this game!');
     }
+  }
+
+  private getHumanReadableGamesList(): string {
+    return Object.keys(GAMES_MAP).join(',');
   }
 
   private async invite(users: User[], gameCode: string): Promise<Reply> {
