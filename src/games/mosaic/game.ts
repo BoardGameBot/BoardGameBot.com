@@ -12,7 +12,7 @@ export interface BoardTemplate {
 }
 
 export interface Board {
-  rows: Bucket[],
+  rows: Bucket[];
   board: Color[][]; // 5x5 board template
 }
 
@@ -50,13 +50,7 @@ export const DEFAULT_TEMPLATE: BoardTemplate = {
 };
 
 export const DEFAULT_BOARD: Board = {
-  rows: [
-    { maxSize: 1 },
-    { maxSize: 2 },
-    { maxSize: 3 },
-    { maxSize: 4 },
-    { maxSize: 5 }
-  ],
+  rows: [{ maxSize: 1 }, { maxSize: 2 }, { maxSize: 3 }, { maxSize: 4 }, { maxSize: 5 }],
   board: [
     [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
     [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],

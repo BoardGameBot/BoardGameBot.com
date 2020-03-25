@@ -12,18 +12,13 @@ export default class MoveHandler extends GameHandler {
   async reply() {
     const splitMsg = this.msg.content.split(' ');
     if (!this.isValidCommand(splitMsg)) {
-      return this.simpleReply('Invalid command. Usage: .move <<CELL NUMBER>>');
+      return this.simpleReply('Invalid command. Usage: .move <<CELL>>');
     }
     if (!this.isCurrentPlayer()) {
       return this.simpleReply('It is not your turn!');
     }
     const coord = splitMsg[1].toUpperCase();
     const cell = coordToCell(coord);
-    const state = this.game.getState();
-    const cells = state.G.cells;
-    if (cell < 0 || cell >= cells.length || cells[cell] !== null) {
-      return this.simpleReply('Invalid cell!');
-    }
     this.game.moves.clickCell(cell);
     await this.save();
     return this.render(cell);

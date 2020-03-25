@@ -14,5 +14,7 @@ export function coordToCell(coord: string) {
 }
 
 export function isValidCoord(coord: string) {
-  return coord.length === 2 && ROWS.indexOf(coord[0].toUpperCase()) !== -1 && Number(coord[1]) <= 3;
+  const row = coord[0].toUpperCase();
+  const column = Number(coord[1]);
+  return coord.length === 2 && ROWS.indexOf(row) !== -1 && column >= 1 && column <= 3;
 }
