@@ -3,7 +3,7 @@ import { Player, GameChannel } from './state';
 import { Id } from './id';
 import { Canvas } from 'canvas';
 
-export const PREFIX = '.';
+export const PREFIX = '/'; // FIXME temporary
 
 export function isEnabledInChannel(gameChannel: GameChannel | undefined, channel: Channel) {
   if (channel.type !== ChannelType.PUBLIC_GROUP) {

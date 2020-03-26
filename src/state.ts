@@ -1,4 +1,3 @@
-import * as Discord from 'discord.js';
 import { Id } from './id';
 
 export interface Player {
@@ -32,5 +31,3 @@ export interface BotChannels {
 export interface Bot {
   channels: BotChannels;
 }
-
-export const client = new Discord.Client();
