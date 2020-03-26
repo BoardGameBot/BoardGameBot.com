@@ -12,17 +12,16 @@ function encodeMentions(message: ReplyMessage): string {
   }
   const contentSplit = message.content.split(' ');
   for (const mention of message.mentions) {
-    contentSplit[mention.wordIndex] = `@${mention.user}`;
+    contentSplit[mention.wordIndex] = `[${mention.user.username}](tg://user?id=${mention.user.id.value})`;
   }
   return contentSplit.join(' ');
 }
 
 function sendMessageToChannel(client: TelegramBot, channel: TelegramBot.Chat, message: ReplyMessage) {
   if (message.image) {
-    client.sendPhoto(channel.id, message.image, { caption: encodeMentions(message) });
-  } else {
-    client.sendMessage(channel.id, encodeMentions(message));
+    client.sendPhoto(channel.id, message.image);
   }
+  client.sendMessage(channel.id, encodeMentions(message), { parse_mode: 'Markdown' });
 }
 
 function sendMessageToUser(client: TelegramBot, user: TelegramBot.User, message: ReplyMessage) {
@@ -42,6 +41,7 @@ export function sendReplyToTelegram(client: TelegramBot, msg: TelegramBot.Messag
 }
 
 export async function translateTelegramMentions(msg: TelegramBot.Message): Promise<Mention[]> {
+  if (!msg.entities) return [];
   const mentionEntities = msg.entities.filter(entity => entity.type === 'text_mention');
   const mentions = [];
   for (const mentionEntity of mentionEntities) {
@@ -76,7 +76,7 @@ export function translateTelegramChannel(msg: TelegramBot.Message): Channel {
 export function translateTelegramUser(user: TelegramBot.User): User {
   return {
     id: genId(user.id),
-    username: user.username,
+    username: user.username || user.first_name,
   };
 }
 

@@ -86,10 +86,10 @@ export default class InviteHandler extends MessageHandler {
     await save(this.state);
     const invitees = players
       .filter(player => player.id !== creator.id)
-      .map(invitee => invitee.username)
+      .map(invitee => '[' + invitee.username + '](tg://user?id=' + invitee.id.value + ')')
       .join(', ');
     return this.simpleReply(
-      `${invitees}, do you want to play ${gameCode} with <@${creator.id.value}> ? Use ".accept" to accept, or ".reject" to reject invite.`,
+      `${invitees}, do you want to play ${gameCode} with @${creator.username} ? Use ".accept" to accept, or ".reject" to reject invite.`,
     );
   }
 }
