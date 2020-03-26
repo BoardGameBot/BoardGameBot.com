@@ -117,6 +117,7 @@ export const MosaicGame: GameConfig = {
   }),
 
   moves: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     move: (G, ctx, moveDetails: MoveDetails) => {
       // TODO...
     },
