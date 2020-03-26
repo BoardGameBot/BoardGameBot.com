@@ -21,6 +21,7 @@ function sendMessageToChannel(client: TelegramBot, channel: TelegramBot.Chat, me
   if (message.image) {
     client.sendPhoto(channel.id, message.image);
   }
+  // eslint-disable-next-line @typescript-eslint/camelcase
   client.sendMessage(channel.id, encodeMentions(message), { parse_mode: 'Markdown' });
 }
 

@@ -1,5 +1,4 @@
 import handlers from '../handlers';
-import { Message as DiscordMessage } from 'discord.js';
 import { load } from '../save';
 import { translateTelegramMessage, sendReplyToTelegram } from './adaptor';
 import DiscordMessagingEnvironment from './TelegramMessagingEnvironment';
