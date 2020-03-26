@@ -2,7 +2,7 @@ import { MessageHandler } from '../MessageHandler';
 import { isCommand, convertUserToPlayer } from '../util';
 import { GAMES_MAP } from '../games';
 import { save } from '../save';
-import { ChannelType, Reply, User } from '../messaging';
+import { ChannelType, Reply, User, Mention } from '../messaging';
 
 type MaybeReply = Reply | undefined;
 
@@ -10,7 +10,7 @@ export default class InviteHandler extends MessageHandler {
   name = 'Invite';
 
   async handlesMessage() {
-    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isCommand(this.channel, this.msg, 'invite');
+    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isCommand(this.env, this.channel, this.msg, 'invite');
   }
 
   async reply(): Promise<Reply> {
@@ -84,12 +84,16 @@ export default class InviteHandler extends MessageHandler {
       gameCode,
     };
     await save(this.state);
-    const invitees = players
+
+    const mentions: Mention[] = players
       .filter(player => player.id !== creator.id)
-      .map(invitee => '[' + invitee.username + '](tg://user?id=' + invitee.id.value + ')')
-      .join(', ');
+      .map((user, i) => ({ user, wordIndex: i }));
+
+    mentions.push({ user: creator, wordIndex: mentions.length + 7 });
+
     return this.simpleReply(
-      `${invitees}, do you want to play ${gameCode} with @${creator.username} ? Use ".accept" to accept, or ".reject" to reject invite.`,
+      `@usernames, do you want to play ${gameCode} with @creator ? Use "${this.env.prefix}accept" to accept, or "${this.env.prefix}reject" to reject invite.`,
+      mentions,
     );
   }
 }

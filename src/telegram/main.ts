@@ -1,7 +1,7 @@
 import handlers from '../handlers';
 import { load } from '../save';
 import { translateTelegramMessage, sendReplyToTelegram } from './adaptor';
-import DiscordMessagingEnvironment from './TelegramMessagingEnvironment';
+import TelegramMessagingEnvironment from './TelegramMessagingEnvironment';
 import * as dotenv from 'dotenv';
 import TelegramBot from 'node-telegram-bot-api';
 import Logger from '../Logger';
@@ -28,7 +28,7 @@ function start() {
 }
 
 const state = load();
-const env = new DiscordMessagingEnvironment(client);
+const env = new TelegramMessagingEnvironment(client);
 
 async function handleMessage(client: TelegramBot, msg: TelegramBot.Message) {
   let recognized = false;

@@ -6,7 +6,7 @@ import { ChannelType, Reply } from '../messaging';
 export default class EnableHandler extends MessageHandler {
   name = 'Enable';
   async handlesMessage() {
-    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isRawCommand(this.msg, 'enable-bgb');
+    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isRawCommand(this.env, this.msg, 'enable-bgb');
   }
 
   async reply(): Promise<Reply> {

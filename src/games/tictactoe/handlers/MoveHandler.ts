@@ -6,7 +6,7 @@ import { coordToCell, isValidCoord } from '../util';
 
 export default class MoveHandler extends GameHandler {
   async handlesMessage() {
-    return isCommand(this.channel, this.msg, 'move');
+    return isCommand(this.env, this.channel, this.msg, 'move');
   }
 
   async reply() {

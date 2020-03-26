@@ -8,7 +8,7 @@ export default class AcceptHandler extends MessageHandler {
   name = 'Accept';
 
   async handlesMessage() {
-    return isCommand(this.channel, this.msg, 'accept');
+    return isCommand(this.env, this.channel, this.msg, 'accept');
   }
 
   async reply(): Promise<Reply> {

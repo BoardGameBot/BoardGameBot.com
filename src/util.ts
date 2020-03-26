@@ -2,8 +2,7 @@ import { Message, Channel, User, Reply, ChannelType, Mention } from './messaging
 import { Player, GameChannel } from './state';
 import { Id } from './id';
 import { Canvas } from 'canvas';
-
-export const PREFIX = '/'; // FIXME temporary
+import { MessagingEnvironment } from './MessagingEnvironment';
 
 export function isEnabledInChannel(gameChannel: GameChannel | undefined, channel: Channel) {
   if (channel.type !== ChannelType.PUBLIC_GROUP) {
@@ -12,19 +11,24 @@ export function isEnabledInChannel(gameChannel: GameChannel | undefined, channel
   return gameChannel && gameChannel.enabled;
 }
 
-export function isRawCommand(msg: Message, cmd: string): boolean {
-  return msg.content.toLowerCase().startsWith(PREFIX + cmd);
+export function isRawCommand(env: MessagingEnvironment, msg: Message, cmd: string): boolean {
+  return msg.content.toLowerCase().startsWith(env.prefix + cmd);
 }
 
-export function isCommand(gameChannel: GameChannel | undefined, msg: Message, cmd: string): boolean {
-  if (isEnabledInChannel(gameChannel, msg.channel) && isRawCommand(msg, cmd)) {
+export function isCommand(
+  env: MessagingEnvironment,
+  gameChannel: GameChannel | undefined,
+  msg: Message,
+  cmd: string,
+): boolean {
+  if (isEnabledInChannel(gameChannel, msg.channel) && isRawCommand(env, msg, cmd)) {
     return true;
   }
   return false;
 }
 
-export function isAnyCommand(gameChannel: GameChannel | undefined, msg: Message) {
-  return isCommand(gameChannel, msg, '');
+export function isAnyCommand(env: MessagingEnvironment, gameChannel: GameChannel | undefined, msg: Message) {
+  return isCommand(env, gameChannel, msg, '');
 }
 
 export function convertUserToPlayer(user: User): Player {
@@ -38,12 +42,13 @@ export function equalId(id1: Id, id2: Id): boolean {
   return id1.namespace === id2.namespace && id1.value === id2.value;
 }
 
-export function simpleReply(type: ChannelType, content: string): Reply {
+export function simpleReply(type: ChannelType, content: string, mentions?: Mention[]): Reply {
   return {
     messages: [
       {
         type,
         content,
+        mentions,
       },
     ],
   };
