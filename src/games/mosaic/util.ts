@@ -48,6 +48,8 @@ export function withdrawFromBag(ctx, bag: Bucket, secondaryBag: Bucket, dest: Bu
   }
   ctx.random.Shuffle(allTiles);
   for (let i = 0; i < count; i++) {
-    addToBucket(dest, allTiles[i], 1);
+    const color = allTiles[i];
+    addToBucket(dest, color, 1);
+    addToBucket(bag, color, -1);
   }
 }

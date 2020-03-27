@@ -15,5 +15,6 @@ describe('Mosaic Game Rules', () => {
     expect(G.boards.length).toEqual(3);
     expect(G.restrictedBuckets.length).toEqual(7);
     expect(getBucketSize(G.restrictedBuckets[0])).toEqual(4);
+    expect(getBucketSize(G.bag)).toEqual(100 - 7 * 4);
   });
 });
