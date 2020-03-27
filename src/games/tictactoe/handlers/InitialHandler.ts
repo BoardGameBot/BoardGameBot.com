@@ -7,7 +7,8 @@ export default class InitialHandler extends GameHandler {
     const state = this.game.getState();
     const currentPlayer = this.getPlayerFromIndex(state.ctx.currentPlayer);
     const content =
-      "Tic-Tac-Toe is starting! @username -- it is your turn. Reply '.move <<CELL>>' for selecting a cell, i.e., '.move B2'.";
+      `Tic-Tac-Toe is starting! @username -- it is your turn. ` +
+      `Reply '${this.env.prefix}move <<CELL>>' for selecting a cell, i.e., '${this.env.prefix}move B2'.`;
     const mention: Mention = {
       user: currentPlayer,
       wordIndex: 3,

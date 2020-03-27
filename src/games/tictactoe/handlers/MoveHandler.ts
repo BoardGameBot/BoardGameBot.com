@@ -12,7 +12,7 @@ export default class MoveHandler extends GameHandler {
   async reply() {
     const splitMsg = this.msg.content.split(' ');
     if (!this.isValidCommand(splitMsg)) {
-      return this.simpleReply('Invalid command. Usage: .move <<CELL>>');
+      return this.simpleReply(`Invalid command. Usage: ${this.env.prefix}move <<CELL>>`);
     }
     if (!this.isCurrentPlayer()) {
       return this.simpleReply('It is not your turn!');
@@ -27,7 +27,7 @@ export default class MoveHandler extends GameHandler {
   async render(lastPlayedCell?: number) {
     const state = this.game.getState();
     const currentPlayer = this.getPlayerFromIndex(state.ctx.currentPlayer);
-    let content = "Done. It is @username turn's now! Use: .move <<CELL>>";
+    let content = `Done. It is @username turn's now! Use: ${this.env.prefix}move <<CELL>>`;
     let mentions: Mention[] = [{ user: currentPlayer, wordIndex: 3 }];
     let winningCells;
     if (state.ctx.gameover && state.ctx.gameover.winner) {
