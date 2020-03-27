@@ -43,7 +43,7 @@ export default class InviteHandler extends MessageHandler {
     if (args.length < 3) {
       return this.simpleReply(
         `Not enough arguments. Correct usage: "${this.env.prefix}invite GAME @PLAYER1 @PLAYER2..."\nAvailable games: ` +
-        this.getHumanReadableGamesList(),
+          this.getHumanReadableGamesList(),
       );
     }
   }
@@ -52,7 +52,7 @@ export default class InviteHandler extends MessageHandler {
     if (!(gameCode in GAMES_MAP)) {
       return this.simpleReply(
         'Invalid game. Check https://boardgamebot.com/games to see a list of games.\nAvailable games: ' +
-        this.getHumanReadableGamesList(),
+          this.getHumanReadableGamesList(),
       );
     }
   }
