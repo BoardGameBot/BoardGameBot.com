@@ -10,6 +10,8 @@ export const DEFAULT_TEMPLATE: BoardTemplate = {
   ],
 };
 
+export const PENALTY_ROW_SIZE = 7;
+
 export const DEFAULT_BOARD: Board = {
   rows: [{ maxSize: 1 }, { maxSize: 2 }, { maxSize: 3 }, { maxSize: 4 }, { maxSize: 5 }],
   board: [
@@ -19,7 +21,7 @@ export const DEFAULT_BOARD: Board = {
     [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
     [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
   ],
-  penaltyRow: [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+  penaltyRow: [],
   points: 0,
 };
 

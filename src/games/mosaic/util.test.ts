@@ -1,5 +1,14 @@
-import { getColorCount, getBucketSize, addToBucket, transferAllTiles, withdrawFromBag } from './util';
-import { Bucket, Color } from './definitions';
+import {
+  getColorCount,
+  getBucketSize,
+  transferTiles,
+  transferAllTiles,
+  withdrawFromBag,
+  moveToPenaltyRow,
+  maybeMovePenaltyToken,
+} from './util';
+import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType } from './definitions';
+import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
 
 describe('Mosaic Util', () => {
   it('should give correct color count for existing color', () => {
@@ -38,20 +47,25 @@ describe('Mosaic Util', () => {
     expect(result).toEqual(3);
   });
 
-  it('should add correctly to Bucket', () => {
-    const bucket: Bucket = {
+  it('should transfer correctly between Buckets', () => {
+    const origin: Bucket = {
       red: 2,
       green: 0,
       blue: 1,
     };
+    const dest: Bucket = {
+      red: 1,
+    };
 
-    addToBucket(bucket, Color.BLACK, 3);
+    transferTiles(origin, dest, Color.RED, 1);
 
-    expect(bucket).toEqual({
-      red: 2,
+    expect(origin).toEqual({
+      red: 1,
       green: 0,
       blue: 1,
-      black: 3,
+    });
+    expect(dest).toEqual({
+      red: 2,
     });
   });
 
@@ -84,6 +98,77 @@ describe('Mosaic Util', () => {
     });
   });
 
+  it('should move correctly to penalty row', () => {
+    const fakeG: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          penaltyRow: [Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW],
+        },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: { red: 6 },
+      restrictedBuckets: [],
+    };
+    const move: MoveDetails = {
+      bucketType: BucketType.CENTER,
+      color: Color.RED,
+      rowType: RowType.PENALTY,
+    };
+
+    moveToPenaltyRow(fakeG, fakeG.boards[0], fakeG.centerBucket, move);
+
+    expect(fakeG.centerBucket).toEqual({ red: 0 });
+    expect(fakeG.boards[0].penaltyRow).toEqual([
+      Color.GREEN,
+      Color.BLUE,
+      Color.RED,
+      Color.YELLOW,
+      Color.RED,
+      Color.RED,
+      Color.RED,
+    ]);
+    expect(fakeG.secondaryBag).toEqual({
+      red: 3,
+    });
+  });
+
+  it('should move correctly penalty token', () => {
+    const fakeG: MosaicGameState = {
+      boards: [{ ...DEFAULT_BOARD, penaltyRow: [] }],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: { penalty: 1 },
+      restrictedBuckets: [],
+    };
+    const fakeCtx = { currentPlayer: '0' };
+
+    maybeMovePenaltyToken(fakeG, fakeCtx);
+
+    expect(fakeG.centerBucket).toEqual({});
+    expect(fakeG.boards[0].penaltyRow).toEqual([Color.PENALTY]);
+  });
+
+  it('should NOT move penalty token', () => {
+    const fakeG: MosaicGameState = {
+      boards: [{ ...DEFAULT_BOARD, penaltyRow: [] }],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [],
+    };
+    const fakeCtx = { currentPlayer: '0' };
+
+    maybeMovePenaltyToken(fakeG, fakeCtx);
+
+    expect(fakeG.centerBucket).toEqual({});
+    expect(fakeG.boards[0].penaltyRow).toEqual([]);
+  });
+
   it('should withdraw from primary bag', () => {
     const primaryBag: Bucket = {
       red: 1,
@@ -97,8 +182,8 @@ describe('Mosaic Util', () => {
     };
     const fakeCtx = {
       random: {
-        Shuffle: () => {
-          /* do nothing*/ return;
+        Shuffle: x => {
+          return x;
         },
       },
     };
@@ -127,8 +212,8 @@ describe('Mosaic Util', () => {
     };
     const fakeCtx = {
       random: {
-        Shuffle: () => {
-          /* do nothing*/ return;
+        Shuffle: x => {
+          return x;
         },
       },
     };

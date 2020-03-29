@@ -5,6 +5,7 @@ export enum Color {
   BLACK = 'black',
   BLUE = 'blue',
   GREEN = 'green',
+  PENALTY = 'penalty',
 }
 
 export interface BoardTemplate {
@@ -25,6 +26,7 @@ export interface Bucket {
   black?: number;
   blue?: number;
   green?: number;
+  penalty?: number;
 }
 
 export interface MosaicGameState {
