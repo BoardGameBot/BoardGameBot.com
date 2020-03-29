@@ -10,6 +10,7 @@ export default class DiscordMessagingEnvironment extends MessagingEnvironment {
   constructor(client: Client) {
     super();
     this.client = client;
+    this.prefix = '.';
   }
 
   async isAdmin(user: User, channel: Channel) {

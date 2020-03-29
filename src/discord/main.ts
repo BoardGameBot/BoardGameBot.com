@@ -1,11 +1,13 @@
-import { client } from '../state';
 import handlers from '../handlers';
+import * as Discord from 'discord.js';
 import { Message as DiscordMessage } from 'discord.js';
 import { load } from '../save';
 import { translateDiscordMessage, sendReplyToDiscord } from './adaptor';
 import DiscordMessagingEnvironment from './DiscordMessagingEnvironment';
 import * as dotenv from 'dotenv';
 import Logger from '../Logger';
+
+const client = new Discord.Client();
 
 dotenv.config();
 

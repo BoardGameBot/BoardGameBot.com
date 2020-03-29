@@ -6,7 +6,7 @@ import { ChannelType, Reply } from '../messaging';
 export default class RejectHandler extends MessageHandler {
   name = 'Reject';
   async handlesMessage() {
-    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isCommand(this.channel, this.msg, 'reject');
+    return this.msg.channel.type === ChannelType.PUBLIC_GROUP && isCommand(this.env, this.channel, this.msg, 'reject');
   }
 
   async reply(): Promise<Reply> {

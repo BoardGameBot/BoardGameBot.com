@@ -7,7 +7,7 @@ export default class DisableHandler extends MessageHandler {
   name = 'Disable';
 
   async handlesMessage() {
-    return isCommand(this.channel, this.msg, 'disable');
+    return isCommand(this.env, this.channel, this.msg, 'disable');
   }
 
   async reply(): Promise<Reply> {

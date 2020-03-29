@@ -27,8 +27,8 @@ export class MessageHandler {
     return Promise.resolve({ messages: [] });
   }
 
-  protected simpleReply(content: string): Reply {
-    return simpleReply(this.msg.channel.type, content);
+  protected simpleReply(content: string, mentions?: Mention[]): Reply {
+    return simpleReply(this.msg.channel.type, content, mentions);
   }
 
   protected replyWithImage(content: string, image: Buffer, mentions?: Mention[]): Reply {
