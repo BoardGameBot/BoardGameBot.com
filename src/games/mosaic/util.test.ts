@@ -290,6 +290,7 @@ describe('Mosaic Util', () => {
         boards: [
           {
             ...DEFAULT_BOARD,
+            rows: [{ maxSize: 1 }, { maxSize: 2 }],
           },
         ],
         boardTemplate: DEFAULT_TEMPLATE,
@@ -321,6 +322,7 @@ describe('Mosaic Util', () => {
         boards: [
           {
             ...DEFAULT_BOARD,
+            rows: [{ maxSize: 1 }, { maxSize: 2 }],
           },
         ],
         boardTemplate: DEFAULT_TEMPLATE,
@@ -345,6 +347,38 @@ describe('Mosaic Util', () => {
 
       expect(result.status).toEqual(false);
       expect(result.reason).toContain('can only have one color');
+    });
+
+    it('should not allow placing a color already on the board', () => {
+      const fakeG: MosaicGameState = {
+        boards: [
+          {
+            ...DEFAULT_BOARD,
+            rows: [{ maxSize: 1 }, { maxSize: 2 }],
+          },
+        ],
+        boardTemplate: DEFAULT_TEMPLATE,
+        bag: {},
+        secondaryBag: {},
+        centerBucket: {},
+        restrictedBuckets: [{ red: 4 }],
+      };
+      fakeG.boards[0].board[1][0] = Color.RED;
+      const ctx = {
+        currentPlayer: '0',
+      };
+      const move: MoveDetails = {
+        bucketType: BucketType.RESTRICTED,
+        bucketIndex: 0,
+        color: Color.RED,
+        rowType: RowType.NORMAL,
+        rowIndex: 1,
+      };
+
+      const result = validMoveDestination(fakeG, ctx, move);
+
+      expect(result.status).toEqual(false);
+      expect(result.reason).toContain('already placed on the board');
     });
   });
 
