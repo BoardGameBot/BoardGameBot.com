@@ -19,7 +19,11 @@ export default class MoveHandler extends GameHandler {
     }
     const coord = splitMsg[1].toUpperCase();
     const cell = coordToCell(coord);
-    this.game.moves.clickCell(cell);
+    if (this.isActiveCell(cell)) {
+      this.game.moves.clickCell(cell);
+    } else {
+      return this.simpleReply('Invalid move!');
+    }
     await this.save();
     return this.render(cell);
   }
@@ -48,5 +52,9 @@ export default class MoveHandler extends GameHandler {
 
   isValidCommand(splitMsg: string[]) {
     return splitMsg.length === 2 && isValidCoord(splitMsg[1]);
+  }
+
+  isActiveCell(id: number) {
+    return this.game.getState().G.cells[id] === null;
   }
 }
