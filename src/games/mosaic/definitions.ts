@@ -60,3 +60,8 @@ export interface MoveDetails {
   rowType: RowType;
   rowIndex?: number;
 }
+
+export interface IsValid {
+  status: boolean;
+  reason?: string;
+}

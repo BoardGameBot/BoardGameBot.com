@@ -1,5 +1,5 @@
 import { COLOR_ARRAY, PENALTY_ROW_SIZE } from './constants';
-import { Bucket, Color, MoveDetails, BucketType, MosaicGameState, Board } from './definitions';
+import { Bucket, Color, MoveDetails, BucketType, MosaicGameState, Board, IsValid, RowType } from './definitions';
 
 /** Gets how many tiles of a given color in given bucket. */
 export function getColorCount(bucket: Bucket, color: Color) {
@@ -74,10 +74,67 @@ export function moveToPenaltyRow(G: MosaicGameState, board: Board, origin: Bucke
   transferTiles(origin, G.secondaryBag, move.color, discardedCount);
 }
 
+/** Executes move to normal row. */
+export function moveToNormalRow(G: MosaicGameState, origin: Bucket, board: Board, move: MoveDetails) {
+  const originCount = getColorCount(origin, move.color);
+  const dest = board.rows[move.rowIndex];
+  const actuallyMoved = Math.min(originCount, dest.maxSize - getBucketSize(dest));
+  transferTiles(origin, dest, move.color, actuallyMoved);
+  moveToPenaltyRow(G, board, origin, move);
+}
+
 /** Maybe moves the penalty token from the center to the user's board. */
 export function maybeMovePenaltyToken(G: MosaicGameState, ctx) {
   if (G.centerBucket.penalty === 1) {
     G.boards[parseInt(ctx.currentPlayer)].penaltyRow.push(Color.PENALTY);
     G.centerBucket.penalty = undefined;
   }
+}
+
+/** Checks if move has valid origin. */
+export function validMoveOrigin(G: MosaicGameState, move: MoveDetails): IsValid {
+  if (move.bucketType === BucketType.RESTRICTED &&
+    !(move.bucketIndex >= 0 && move.bucketIndex < G.restrictedBuckets.length)) {
+    return { status: false, reason: 'Invalid origin selection.' };
+  }
+  const origin = getOriginBucketForMove(G, move);
+  const originCount = getColorCount(origin, move.color);
+  if (originCount == 0) {
+    return { status: false, reason: 'Origin does not have this color available' };
+  }
+  return { status: true };
+}
+
+/** Whether row has a given color or not. */
+export function boardRowHasColor(row: Color[], color: Color) {
+  for (const colColor of row) {
+    if (colColor == color) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Checks if move has valid origin. */
+export function validMoveDestination(G: MosaicGameState, ctx, move: MoveDetails): IsValid {
+  const board = G.boards[parseInt(ctx.currentPlayer)];
+  if (move.rowType == RowType.NORMAL) {
+    if (!(move.rowIndex >= 0 && move.rowIndex <= 4)) {
+      return { status: false, reason: 'Invalid row selection.' };
+    }
+    const dest = board.rows[move.rowIndex];
+    const currentTotalSize = getBucketSize(dest);
+    if (dest.maxSize === currentTotalSize) {
+      return { status: false, reason: 'No empty space in this row.' };
+    }
+    const currentColorSize = getColorCount(dest, move.color);
+    if (currentColorSize != currentTotalSize) {
+      return { status: false, reason: 'Row can only have one color at a time.' };
+    }
+    const boardRow = board.board[move.rowIndex];
+    if (boardRowHasColor(boardRow, move.color)) {
+      return { status: false, reason: 'This color is already placed on the board.' };
+    }
+  }
+  return { status: true };
 }

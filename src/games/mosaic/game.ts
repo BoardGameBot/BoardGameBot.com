@@ -1,14 +1,15 @@
-import { GameConfig } from 'boardgame.io/core';
+import { GameConfig, INVALID_MOVE } from 'boardgame.io/core';
 import { DEFAULT_BAG, DEFAULT_TEMPLATE, DEFAULT_BOARD } from './constants';
 import { MosaicGameState, Bucket, MoveDetails, Board, RowType, BucketType } from './definitions';
 import {
   withdrawFromBag,
   getOriginBucketForMove,
-  getColorCount,
-  transferTiles,
   moveToPenaltyRow,
   transferAllTiles,
   maybeMovePenaltyToken,
+  validMoveOrigin,
+  validMoveDestination,
+  moveToNormalRow
 } from './util';
 
 export const MosaicGame: GameConfig = {
@@ -28,15 +29,17 @@ export const MosaicGame: GameConfig = {
 
   moves: {
     move: (G: MosaicGameState, ctx, move: MoveDetails) => {
+      if (!validMoveOrigin(G, move).status ||
+        !validMoveDestination(G, ctx, move).status) {
+        return INVALID_MOVE;
+      }
       if (move.bucketType == BucketType.CENTER) {
         maybeMovePenaltyToken(G, ctx);
       }
       const origin = getOriginBucketForMove(G, move);
-      const originCount = getColorCount(origin, move.color);
       const board = G.boards[parseInt(ctx.currentPlayer)];
       if (move.rowType == RowType.NORMAL) {
-        const dest = board.rows[move.rowIndex];
-        transferTiles(origin, dest, move.color, originCount);
+        moveToNormalRow(G, origin, board, move);
       } else if (move.rowType == RowType.PENALTY) {
         moveToPenaltyRow(G, board, origin, move);
       }
