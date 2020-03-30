@@ -1,7 +1,6 @@
 import { Namespace, Id } from '../id';
 import { Message, User, Channel, ChannelType, Mention, Reply, ReplyMessage } from '../messaging';
 import TelegramBot from 'node-telegram-bot-api';
-import { simpleReply } from '../util';
 
 function genId(value: number): Id {
   return { namespace: Namespace.TELEGRAM, value: value.toString() };
