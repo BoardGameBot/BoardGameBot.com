@@ -5,9 +5,11 @@ import {
   transferAllTiles,
   withdrawFromBag,
   moveToPenaltyRow,
+  moveToNormalRow,
   maybeMovePenaltyToken,
   validMoveOrigin,
   validMoveDestination,
+  getAvailableTilesCount,
 } from './util';
 import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType } from './definitions';
 import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
@@ -143,6 +145,48 @@ describe('Mosaic Util', () => {
       ]);
       expect(fakeG.secondaryBag).toEqual({
         red: 3,
+      });
+    });
+  });
+
+  describe('moveToNormalRow()', () => {
+    it('should move correctly to normal row', () => {
+      const fakeG: MosaicGameState = {
+        boards: [
+          {
+            ...DEFAULT_BOARD,
+            rows: [{ maxSize: 1 }, { maxSize: 2 }],
+            penaltyRow: [Color.GREEN],
+          },
+        ],
+        boardTemplate: DEFAULT_TEMPLATE,
+        bag: {},
+        secondaryBag: {},
+        centerBucket: { red: 10 },
+        restrictedBuckets: [],
+      };
+      const move: MoveDetails = {
+        bucketType: BucketType.CENTER,
+        color: Color.RED,
+        rowType: RowType.NORMAL,
+        rowIndex: 1,
+      };
+
+      moveToNormalRow(fakeG, fakeG.centerBucket, fakeG.boards[0], move);
+
+      expect(fakeG.centerBucket).toEqual({ red: 0 });
+      expect(fakeG.boards[0].rows[1].red).toEqual(2);
+      expect(fakeG.boards[0].penaltyRow).toEqual([
+        Color.GREEN,
+        Color.RED,
+        Color.RED,
+        Color.RED,
+        Color.RED,
+        Color.RED,
+        Color.RED,
+      ]);
+      expect(fakeG.secondaryBag).toEqual({
+        red: 2,
       });
     });
   });
@@ -476,6 +520,23 @@ describe('Mosaic Util', () => {
         blue: 2,
         green: 1,
       });
+    });
+  });
+
+  describe('getAvailableTilesCount()', () => {
+    it('should return correct count', () => {
+      const fakeG: MosaicGameState = {
+        boards: [DEFAULT_BOARD],
+        boardTemplate: DEFAULT_TEMPLATE,
+        bag: {},
+        secondaryBag: {},
+        centerBucket: { red: 10 },
+        restrictedBuckets: [{ yellow: 3 }, { green: 2 }],
+      };
+
+      const result = getAvailableTilesCount(fakeG);
+
+      expect(result).toEqual(15);
     });
   });
 });

@@ -10,6 +10,7 @@ import {
   validMoveOrigin,
   validMoveDestination,
   moveToNormalRow,
+  getAvailableTilesCount,
 } from './util';
 
 export const MosaicGame: GameConfig = {
@@ -27,23 +28,44 @@ export const MosaicGame: GameConfig = {
     };
   },
 
-  moves: {
-    move: (G: MosaicGameState, ctx, move: MoveDetails) => {
-      if (!validMoveOrigin(G, move).status || !validMoveDestination(G, ctx, move).status) {
-        return INVALID_MOVE;
-      }
-      if (move.bucketType == BucketType.CENTER) {
-        maybeMovePenaltyToken(G, ctx);
-      }
-      const origin = getOriginBucketForMove(G, move);
-      const board = G.boards[parseInt(ctx.currentPlayer)];
-      if (move.rowType == RowType.NORMAL) {
-        moveToNormalRow(G, origin, board, move);
-      } else if (move.rowType == RowType.PENALTY) {
-        moveToPenaltyRow(G, board, origin, move);
-      }
-      transferAllTiles(origin, G.centerBucket);
-      ctx.events.endTurn();
+  phases: {
+    buy: {
+      moves: {
+        buyTiles: (G: MosaicGameState, ctx, move: MoveDetails) => {
+          if (!validMoveOrigin(G, move).status || !validMoveDestination(G, ctx, move).status) {
+            return INVALID_MOVE;
+          }
+          if (move.bucketType == BucketType.CENTER) {
+            maybeMovePenaltyToken(G, ctx);
+          }
+          const origin = getOriginBucketForMove(G, move);
+          const board = G.boards[parseInt(ctx.currentPlayer)];
+          if (move.rowType == RowType.NORMAL) {
+            moveToNormalRow(G, origin, board, move);
+          } else if (move.rowType == RowType.PENALTY) {
+            moveToPenaltyRow(G, board, origin, move);
+          }
+          transferAllTiles(origin, G.centerBucket);
+          ctx.events.endTurn();
+        },
+      },
+      endIf: G => getAvailableTilesCount(G) === 0,
+      start: true,
+      next: 'build',
+    },
+    build: {
+      moves: {
+        buildBoard: () => {
+          return;
+        },
+      },
+    },
+    end: {
+      moves: {
+        finalScore: () => {
+          return;
+        },
+      },
     },
   },
 };

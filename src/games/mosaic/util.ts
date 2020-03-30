@@ -140,3 +140,13 @@ export function validMoveDestination(G: MosaicGameState, ctx, move: MoveDetails)
   }
   return { status: true };
 }
+
+/** Gets total number of available tiles not owned by any player. */
+export function getAvailableTilesCount(G: MosaicGameState): number {
+  let count = 0;
+  for (const bucket of G.restrictedBuckets) {
+    count += getBucketSize(bucket);
+  }
+  count += getBucketSize(G.centerBucket);
+  return count;
+}
