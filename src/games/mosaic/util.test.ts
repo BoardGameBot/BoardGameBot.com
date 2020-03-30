@@ -6,7 +6,6 @@ import {
   withdrawFromBag,
   moveToPenaltyRow,
   maybeMovePenaltyToken,
-  moveToNormalRow,
   validMoveOrigin,
   validMoveDestination,
 } from './util';
@@ -107,7 +106,7 @@ describe('Mosaic Util', () => {
         yellow: 0,
       });
     });
-  })
+  });
 
   describe('moveToPenaltyRow()', () => {
     it('should move correctly to penalty row', () => {
@@ -242,7 +241,7 @@ describe('Mosaic Util', () => {
         restrictedBuckets: [{ red: 4 }],
       };
       const ctx = {
-        currentPlayer: '0'
+        currentPlayer: '0',
       };
       const move: MoveDetails = {
         bucketType: BucketType.RESTRICTED,
@@ -270,20 +269,20 @@ describe('Mosaic Util', () => {
         restrictedBuckets: [{ red: 4 }],
       };
       const ctx = {
-        currentPlayer: '0'
+        currentPlayer: '0',
       };
       const move: MoveDetails = {
         bucketType: BucketType.RESTRICTED,
         bucketIndex: 0,
         color: Color.RED,
         rowType: RowType.NORMAL,
-        rowIndex: 6
+        rowIndex: 6,
       };
 
       const result = validMoveDestination(fakeG, ctx, move);
 
       expect(result.status).toEqual(false);
-      expect(result.reason).toContain("Invalid row");
+      expect(result.reason).toContain('Invalid row');
     });
 
     it('should not allow selecting row without space', () => {
@@ -301,20 +300,20 @@ describe('Mosaic Util', () => {
       };
       fakeG.boards[0].rows[0].red = 1;
       const ctx = {
-        currentPlayer: '0'
+        currentPlayer: '0',
       };
       const move: MoveDetails = {
         bucketType: BucketType.RESTRICTED,
         bucketIndex: 0,
         color: Color.RED,
         rowType: RowType.NORMAL,
-        rowIndex: 0
+        rowIndex: 0,
       };
 
       const result = validMoveDestination(fakeG, ctx, move);
 
       expect(result.status).toEqual(false);
-      expect(result.reason).toContain("No empty space");
+      expect(result.reason).toContain('No empty space');
     });
 
     it('should not allow more than one color in a row', () => {
@@ -332,20 +331,20 @@ describe('Mosaic Util', () => {
       };
       fakeG.boards[0].rows[1].green = 1;
       const ctx = {
-        currentPlayer: '0'
+        currentPlayer: '0',
       };
       const move: MoveDetails = {
         bucketType: BucketType.RESTRICTED,
         bucketIndex: 0,
         color: Color.RED,
         rowType: RowType.NORMAL,
-        rowIndex: 1
+        rowIndex: 1,
       };
 
       const result = validMoveDestination(fakeG, ctx, move);
 
       expect(result.status).toEqual(false);
-      expect(result.reason).toContain("can only have one color");
+      expect(result.reason).toContain('can only have one color');
     });
   });
 

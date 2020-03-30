@@ -9,7 +9,7 @@ import {
   maybeMovePenaltyToken,
   validMoveOrigin,
   validMoveDestination,
-  moveToNormalRow
+  moveToNormalRow,
 } from './util';
 
 export const MosaicGame: GameConfig = {
@@ -29,8 +29,7 @@ export const MosaicGame: GameConfig = {
 
   moves: {
     move: (G: MosaicGameState, ctx, move: MoveDetails) => {
-      if (!validMoveOrigin(G, move).status ||
-        !validMoveDestination(G, ctx, move).status) {
+      if (!validMoveOrigin(G, move).status || !validMoveDestination(G, ctx, move).status) {
         return INVALID_MOVE;
       }
       if (move.bucketType == BucketType.CENTER) {

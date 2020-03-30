@@ -93,8 +93,10 @@ export function maybeMovePenaltyToken(G: MosaicGameState, ctx) {
 
 /** Checks if move has valid origin. */
 export function validMoveOrigin(G: MosaicGameState, move: MoveDetails): IsValid {
-  if (move.bucketType === BucketType.RESTRICTED &&
-    !(move.bucketIndex >= 0 && move.bucketIndex < G.restrictedBuckets.length)) {
+  if (
+    move.bucketType === BucketType.RESTRICTED &&
+    !(move.bucketIndex >= 0 && move.bucketIndex < G.restrictedBuckets.length)
+  ) {
     return { status: false, reason: 'Invalid origin selection.' };
   }
   const origin = getOriginBucketForMove(G, move);
