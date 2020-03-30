@@ -68,5 +68,23 @@ describe('Mosaic Game Rules', () => {
     expect(G.centerBucket).toEqual({ red: 0, blue: 1, yellow: 0, green: 0, black: 0 });
   });
 
-  // TODO(flamecoals): Add test for when user selects penalty row.
+  it('should move from restricted bucket to penalty row correctly', () => {
+    const client = Client({
+      game: { ...MosaicGame, seed: 1 },
+      numPlayers: 2,
+    });
+
+    // First restricted: {"maxSize":4,"black":2,"red":1,"blue":1}
+    const move: MoveDetails = {
+      bucketType: BucketType.RESTRICTED,
+      bucketIndex: 0,
+      color: Color.BLACK,
+      rowType: RowType.PENALTY,
+    };
+    client.moves.move(move);
+    const G: MosaicGameState = client.store.getState().G;
+    expect(G.boards[0].penaltyRow).toEqual([Color.BLACK, Color.BLACK]);
+    expect(getBucketSize(G.restrictedBuckets[0])).toEqual(0);
+    expect(G.centerBucket).toEqual({ penalty: 1, red: 1, blue: 1, yellow: 0, green: 0, black: 0 });
+  });
 });
