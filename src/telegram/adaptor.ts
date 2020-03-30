@@ -1,9 +1,14 @@
 import { Namespace, Id } from '../id';
 import { Message, User, Channel, ChannelType, Mention, Reply, ReplyMessage } from '../messaging';
 import TelegramBot from 'node-telegram-bot-api';
+import { simpleReply } from '../util';
 
 function genId(value: number): Id {
   return { namespace: Namespace.TELEGRAM, value: value.toString() };
+}
+
+function genUsernameId(username: string): Id {
+  return { namespace: Namespace.TELEGRAM_USERNAME, value: username };
 }
 
 function encodeMentions(message: ReplyMessage): string {
@@ -32,6 +37,12 @@ function sendMessageToUser(client: TelegramBot, user: TelegramBot.User, message:
 export function sendReplyToTelegram(client: TelegramBot, msg: TelegramBot.Message, reply: Reply) {
   for (const message of reply.messages) {
     if (message.type == ChannelType.PVT) {
+      if (msg.chat.type == 'group') {
+        sendMessageToChannel(client, msg.chat, {
+          type: ChannelType.PUBLIC_GROUP,
+          content: 'A private message was sent to you. If you did not receive it, you need to first send a message to me privately and repeat the command here.'
+        });
+      }
       sendMessageToUser(client, msg.from, message);
     } else if (message.type == ChannelType.PUBLIC_GROUP) {
       sendMessageToChannel(client, msg.chat, message);
@@ -41,15 +52,31 @@ export function sendReplyToTelegram(client: TelegramBot, msg: TelegramBot.Messag
   }
 }
 
+function telegramUserFromMention(msg, mentionEntity): User {
+  const offset = mentionEntity.offset;
+  const username = msg.text.substr(offset, offset + mentionEntity.length);
+  return {
+    id: genUsernameId(username.substr(1)),
+    username
+  };
+}
+
 export async function translateTelegramMentions(msg: TelegramBot.Message): Promise<Mention[]> {
   if (!msg.entities) return [];
-  const mentionEntities = msg.entities.filter(entity => entity.type === 'text_mention');
+  const mentionEntities = msg.entities.filter(entity => entity.type == 'text_mention' || entity.type == 'mention');
   const mentions = [];
   for (const mentionEntity of mentionEntities) {
-    mentions.push({
-      wordIndex: mentionEntity.offset,
-      user: translateTelegramUser(mentionEntity.user),
-    });
+    if (mentionEntity.type == 'text_mention') {
+      mentions.push({
+        wordIndex: mentionEntity.offset,
+        user: translateTelegramUser(mentionEntity.user),
+      });
+    } else {
+      mentions.push({
+        wordIndex: mentionEntity.offset,
+        user: telegramUserFromMention(msg, mentionEntity),
+      });
+    }
   }
   return mentions;
 }
@@ -75,10 +102,17 @@ export function translateTelegramChannel(msg: TelegramBot.Message): Channel {
 }
 
 export function translateTelegramUser(user: TelegramBot.User): User {
-  return {
-    id: genId(user.id),
-    username: user.username || user.first_name,
-  };
+  if (user.username) {
+    return {
+      id: genUsernameId(user.username),
+      username: user.username,
+    };
+  } else {
+    return {
+      id: genId(user.id),
+      username: user.first_name,
+    };
+  }
 }
 
 export async function translateTelegramMessage(msg: TelegramBot.Message): Promise<Message> {
