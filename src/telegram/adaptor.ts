@@ -40,7 +40,8 @@ export function sendReplyToTelegram(client: TelegramBot, msg: TelegramBot.Messag
       if (msg.chat.type == 'group') {
         sendMessageToChannel(client, msg.chat, {
           type: ChannelType.PUBLIC_GROUP,
-          content: 'A private message was sent to you. If you did not receive it, you need to first send a message to me privately and repeat the command here.'
+          content:
+            'A private message was sent to you. If you did not receive it, you need to first send a message to me privately and repeat the command here.',
         });
       }
       sendMessageToUser(client, msg.from, message);
@@ -57,7 +58,7 @@ function telegramUserFromMention(msg, mentionEntity): User {
   const username = msg.text.substr(offset, offset + mentionEntity.length);
   return {
     id: genUsernameId(username.substr(1)),
-    username
+    username,
   };
 }
 
