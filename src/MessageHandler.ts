@@ -17,13 +17,17 @@ export class MessageHandler {
     this.env = env;
   }
 
-  // Whether or not this specific handler cares about this message.
+  /** Whether or not this specific handler cares about this message.*/
+  /* istanbul ignore next */
   public async handlesMessage(): Promise<boolean> {
+    // stub
     return Promise.resolve(false);
   }
 
-  // Reply to the message (will only be called when handlesMessage returns true).
+  /** Reply to the message (will only be called when handlesMessage returns true). */
+  /* istanbul ignore next */
   public async reply(): Promise<Reply> {
+    // stub
     return Promise.resolve({ messages: [] });
   }
 
