@@ -19,7 +19,7 @@
     "coveralls": "cat coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@types/node": "^13.7.4",
     "@types/node-telegram-bot-api": "^0.40.2",
