@@ -150,3 +150,36 @@ export function getAvailableTilesCount(G: MosaicGameState): number {
   count += getBucketSize(G.centerBucket);
   return count;
 }
+
+export function placeTilesAndScore() {
+  // TODO(flamecoals): WIP
+}
+
+export function applyFinalScore() {
+  // TODO(flamecoals): WIP
+}
+
+/** Gets player index with highest score. */
+export function getWinner(G: MosaicGameState): number {
+  let maxIndex = -1;
+  let maxValue = -1;
+  for (const [i, board] of G.boards.entries()) {
+    if (board.points > maxValue) {
+      maxValue = board.points;
+      maxIndex = i;
+    }
+  }
+  return maxIndex;
+}
+
+/** Whether the game ended now. */
+export function isGameOver(G: MosaicGameState): boolean {
+  for (const board of G.boards) {
+    for (const boardRow of board.board) {
+      if (!boardRow.includes(Color.NONE)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

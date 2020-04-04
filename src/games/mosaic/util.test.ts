@@ -10,6 +10,8 @@ import {
   validMoveOrigin,
   validMoveDestination,
   getAvailableTilesCount,
+  isGameOver,
+  getWinner,
 } from './util';
 import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType } from './definitions';
 import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
@@ -538,5 +540,79 @@ describe('Mosaic Util', () => {
 
       expect(result).toEqual(15);
     });
+  });
+
+  describe('isGameOver()', () => {
+    it('should return game over', () => {
+      const fakeG: MosaicGameState = {
+        boards: [
+          DEFAULT_BOARD,
+          {
+            ...DEFAULT_BOARD,
+            board: [
+              [Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.BLACK],
+              [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+              [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+              [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+              [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.NONE],
+            ],
+          },
+        ],
+        boardTemplate: DEFAULT_TEMPLATE,
+        bag: {},
+        secondaryBag: {},
+        centerBucket: { red: 10 },
+        restrictedBuckets: [{ yellow: 3 }, { green: 2 }],
+      };
+
+      const result = isGameOver(fakeG);
+
+      expect(result).toEqual(true);
+    });
+
+    it('should NOT return game over', () => {
+      const fakeG: MosaicGameState = {
+        boards: [DEFAULT_BOARD],
+        boardTemplate: DEFAULT_TEMPLATE,
+        bag: {},
+        secondaryBag: {},
+        centerBucket: { red: 10 },
+        restrictedBuckets: [{ yellow: 3 }, { green: 2 }],
+      };
+
+      const result = isGameOver(fakeG);
+
+      expect(result).toEqual(false);
+    });
+  });
+});
+
+describe('getWinner()', () => {
+  it('should get the winner correctly', () => {
+    const fakeG: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          points: 20,
+        },
+        {
+          ...DEFAULT_BOARD,
+          points: 2,
+        },
+        {
+          ...DEFAULT_BOARD,
+          points: 40,
+        },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: { red: 10 },
+      restrictedBuckets: [{ yellow: 3 }, { green: 2 }],
+    };
+
+    const result = getWinner(fakeG);
+
+    expect(result).toEqual(2);
   });
 });

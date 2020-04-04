@@ -33,7 +33,7 @@ describe('Mosaic Game Rules', () => {
       rowType: RowType.NORMAL,
       rowIndex: 4,
     };
-    client.moves.buyTiles(move);
+    client.moves.move(move);
     const G: MosaicGameState = client.store.getState().G;
     expect(G.boards[0].rows[4]).toEqual({ maxSize: 5, black: 2 });
     expect(getBucketSize(G.restrictedBuckets[0])).toEqual(0);
@@ -54,14 +54,14 @@ describe('Mosaic Game Rules', () => {
       rowType: RowType.NORMAL,
       rowIndex: 4,
     };
-    client.moves.buyTiles(firstMove);
+    client.moves.move(firstMove);
     const secondMove: MoveDetails = {
       bucketType: BucketType.CENTER,
       color: Color.RED,
       rowType: RowType.NORMAL,
       rowIndex: 0,
     };
-    client.moves.buyTiles(secondMove);
+    client.moves.move(secondMove);
     const G: MosaicGameState = client.store.getState().G;
     expect(G.boards[1].rows[0]).toEqual({ maxSize: 1, red: 1 });
     expect(G.boards[1].penaltyRow).toEqual([Color.PENALTY]);
@@ -81,7 +81,7 @@ describe('Mosaic Game Rules', () => {
       color: Color.BLACK,
       rowType: RowType.PENALTY,
     };
-    client.moves.buyTiles(move);
+    client.moves.move(move);
     const G: MosaicGameState = client.store.getState().G;
     expect(G.boards[0].penaltyRow).toEqual([Color.BLACK, Color.BLACK]);
     expect(getBucketSize(G.restrictedBuckets[0])).toEqual(0);

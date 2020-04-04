@@ -29,6 +29,12 @@ export interface Bucket {
   penalty?: number;
 }
 
+export interface ScoreExplanation {
+  player: number;
+  score: number;
+  explanation: string;
+}
+
 export interface MosaicGameState {
   boards: Board[];
   boardTemplate: BoardTemplate;
@@ -41,6 +47,7 @@ export interface MosaicGameState {
   restrictedBuckets: Bucket[];
   centerBucket: Bucket;
   secondaryBag: Bucket;
+  scoreExplanation?: ScoreExplanation[];
 }
 
 export enum BucketType {
