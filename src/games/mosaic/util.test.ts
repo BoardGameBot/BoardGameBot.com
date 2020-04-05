@@ -651,7 +651,7 @@ describe('placeTilesAndScore()', () => {
 
     placeTilesAndScore(fakeG);
 
-    expect(fakeG).toEqual({
+    const expected: MosaicGameState = {
       boards: [
         {
           ...DEFAULT_BOARD,
@@ -679,9 +679,14 @@ describe('placeTilesAndScore()', () => {
       ],
       boardTemplate: DEFAULT_TEMPLATE,
       bag: {},
-      secondaryBag: {},
       centerBucket: {},
       restrictedBuckets: [{}],
-    });
+      secondaryBag: {
+        black: 4,
+        blue: 1,
+        green: 3,
+      }
+    };
+    expect(fakeG).toEqual(expected);
   });
 });

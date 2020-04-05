@@ -204,6 +204,7 @@ export function placeTilesAndScore(G: MosaicGameState) {
     for (const [rowIndex, row] of board.rows.entries()) {
       const color = getAnyPieceColor(row);
       if (row[color] === row.maxSize) {
+        transferTiles(row, G.secondaryBag, color, row[color] - 1);
         row[color] = 0;
         const columnIndex = G.boardTemplate.template[rowIndex].indexOf(color);
         board.board[rowIndex][columnIndex] = color;
