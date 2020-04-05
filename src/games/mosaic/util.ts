@@ -1,5 +1,17 @@
 import { COLOR_ARRAY, PENALTY_ROW_SIZE } from './constants';
-import { Bucket, Color, MoveDetails, BucketType, MosaicGameState, Board, IsValid, RowType } from './definitions';
+import {
+  Bucket,
+  Color,
+  MoveDetails,
+  BucketType,
+  MosaicGameState,
+  Board,
+  IsValid,
+  RowType,
+  Coord,
+  NewPointsExplanation,
+  PointsExplanation,
+} from './definitions';
 
 /** Gets how many tiles of a given color in given bucket. */
 export function getColorCount(bucket: Bucket, color: Color) {
@@ -31,6 +43,16 @@ export function transferAllTiles(origin: Bucket, dest: Bucket) {
     const originCount = getColorCount(origin, color);
     transferTiles(origin, dest, color, originCount);
   }
+}
+
+/** Gets the color of any piece on the bucket.  */
+export function getAnyPieceColor(bucket: Bucket): Color {
+  for (const color of COLOR_ARRAY) {
+    if (bucket[color] > 0) {
+      return color;
+    }
+  }
+  return Color.NONE;
 }
 
 /** Withdraws "count" tiles from bag(s) into bucket. */
@@ -151,11 +173,55 @@ export function getAvailableTilesCount(G: MosaicGameState): number {
   return count;
 }
 
-export function placeTilesAndScore() {
-  // TODO(flamecoals): WIP
+function countNeighbors(board: Board, coord: Coord, direction: Coord): number {
+  if (coord[0] < 0 || coord[0] >= 5 || coord[1] < 0 || coord[1] >= 5) {
+    return 0;
+  }
+  if (board.board[coord[0]][coord[1]] !== Color.NONE) {
+    return 1 + countNeighbors(board, [coord[0] + direction[0], coord[1] + direction[1]], direction);
+  }
+  return 0;
+}
+
+function getPlacedPiecePoints(board: Board, coord: Coord): number {
+  return (
+    1 +
+    countNeighbors(board, [coord[0] + 1, coord[1]], [1, 0]) +
+    countNeighbors(board, [coord[0] - 1, coord[1]], [-1, 0]) +
+    countNeighbors(board, [coord[0], coord[1] + 1], [0, 1]) +
+    countNeighbors(board, [coord[0], coord[1] - 1], [0, -1])
+  );
+}
+
+function addPointsExplanation(board: Board, explanation: NewPointsExplanation) {
+  board.newPointsExplanation = [explanation, ...(board.newPointsExplanation || [])];
+}
+
+/** Places tiles and updates score for that new tile. */
+export function placeTilesAndScore(G: MosaicGameState) {
+  for (const board of G.boards) {
+    let points = 0;
+    for (const [rowIndex, row] of board.rows.entries()) {
+      const color = getAnyPieceColor(row);
+      if (row[color] === row.maxSize) {
+        row[color] = 0;
+        const columnIndex = G.boardTemplate.template[rowIndex].indexOf(color);
+        board.board[rowIndex][columnIndex] = color;
+        points += getPlacedPiecePoints(board, [rowIndex, columnIndex]);
+      }
+    }
+    board.points += points;
+    if (points) {
+      addPointsExplanation(board, { points, explanation: PointsExplanation.NEW_TILE_NEIGHBORS });
+    }
+  }
 }
 
 export function applyFinalScore() {
+  // TODO(flamecoals): WIP
+}
+
+export function drawMoreTiles() {
   // TODO(flamecoals): WIP
 }
 

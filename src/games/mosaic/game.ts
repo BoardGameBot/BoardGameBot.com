@@ -15,6 +15,7 @@ import {
   getWinner,
   placeTilesAndScore,
   applyFinalScore,
+  drawMoreTiles,
 } from './util';
 
 export const MosaicGame: GameConfig = {
@@ -50,12 +51,15 @@ export const MosaicGame: GameConfig = {
       }
       transferAllTiles(origin, G.centerBucket);
       if (getAvailableTilesCount(G) === 0) {
-        placeTilesAndScore();
-      }
-      if (isGameOver(G)) {
-        applyFinalScore();
-        const winner = `${getWinner(G)}`;
-        ctx.events.endGame({ winner });
+        board.newPointsExplanation = [];
+        placeTilesAndScore(G);
+        if (isGameOver(G)) {
+          applyFinalScore();
+          const winner = `${getWinner(G)}`;
+          ctx.events.endGame({ winner });
+        } else {
+          drawMoreTiles();
+        }
       }
     },
   },

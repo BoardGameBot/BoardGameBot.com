@@ -12,8 +12,9 @@ import {
   getAvailableTilesCount,
   isGameOver,
   getWinner,
+  placeTilesAndScore,
 } from './util';
-import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType } from './definitions';
+import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType, PointsExplanation } from './definitions';
 import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
 
 describe('Mosaic Util', () => {
@@ -614,5 +615,73 @@ describe('getWinner()', () => {
     const result = getWinner(fakeG);
 
     expect(result).toEqual(2);
+  });
+});
+
+describe('placeTilesAndScore()', () => {
+  it('should place tiles and score correctly', () => {
+    const fakeG: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          points: 20,
+          board: [
+            [Color.NONE, Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN],
+            [Color.GREEN, Color.NONE, Color.NONE, Color.RED, Color.BLACK],
+            [Color.BLACK, Color.GREEN, Color.BLUE, Color.NONE, Color.NONE],
+            [Color.NONE, Color.NONE, Color.NONE, Color.NONE, Color.YELLOW],
+            [Color.NONE, Color.NONE, Color.NONE, Color.GREEN, Color.BLUE],
+          ],
+          rows: [
+            { maxSize: 1, blue: 1 }, // 7 points
+            { maxSize: 2, blue: 2 }, // 4 points
+            { maxSize: 3, red: 2 }, // 0 points
+            { maxSize: 4, green: 4 }, // 2 point
+            { maxSize: 5, black: 5 }, // 5 points
+          ],
+        },
+        { ...DEFAULT_BOARD },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [{}],
+    };
+
+    placeTilesAndScore(fakeG);
+
+    expect(fakeG).toEqual({
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          newPointsExplanation: [{ points: 18, explanation: PointsExplanation.NEW_TILE_NEIGHBORS }],
+          points: 38, // + 18 points
+          board: [
+            [Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN],
+            [Color.GREEN, Color.BLUE, Color.NONE, Color.RED, Color.BLACK],
+            [Color.BLACK, Color.GREEN, Color.BLUE, Color.NONE, Color.NONE],
+            [Color.NONE, Color.NONE, Color.GREEN, Color.NONE, Color.YELLOW],
+            [Color.NONE, Color.NONE, Color.BLACK, Color.GREEN, Color.BLUE],
+          ],
+          rows: [
+            { maxSize: 1, blue: 0 },
+            { maxSize: 2, blue: 0 },
+            { maxSize: 3, red: 2 },
+            { maxSize: 4, green: 0 },
+            { maxSize: 5, black: 0 },
+          ],
+        },
+        {
+          ...DEFAULT_BOARD,
+          points: 0,
+        },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [{}],
+    });
   });
 });

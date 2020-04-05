@@ -8,6 +8,8 @@ export enum Color {
   PENALTY = 'penalty',
 }
 
+export type Coord = [number, number];
+
 export interface BoardTemplate {
   template: Color[][]; // 5x5 board template
 }
@@ -17,6 +19,7 @@ export interface Board {
   board: Color[][]; // 5x5 board template
   penaltyRow: Color[];
   points: number;
+  newPointsExplanation?: NewPointsExplanation[];
 }
 
 export interface Bucket {
@@ -29,10 +32,13 @@ export interface Bucket {
   penalty?: number;
 }
 
-export interface ScoreExplanation {
-  player: number;
-  score: number;
-  explanation: string;
+export enum PointsExplanation {
+  NEW_TILE_NEIGHBORS,
+}
+
+export interface NewPointsExplanation {
+  points: number;
+  explanation: PointsExplanation;
 }
 
 export interface MosaicGameState {
@@ -47,7 +53,6 @@ export interface MosaicGameState {
   restrictedBuckets: Bucket[];
   centerBucket: Bucket;
   secondaryBag: Bucket;
-  scoreExplanation?: ScoreExplanation[];
 }
 
 export enum BucketType {
