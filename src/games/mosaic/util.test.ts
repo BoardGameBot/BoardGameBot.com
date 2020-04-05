@@ -685,7 +685,7 @@ describe('placeTilesAndScore()', () => {
         black: 4,
         blue: 1,
         green: 3,
-      }
+      },
     };
     expect(fakeG).toEqual(expected);
   });
