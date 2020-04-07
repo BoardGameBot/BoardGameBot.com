@@ -34,6 +34,9 @@ export interface Bucket {
 
 export enum PointsExplanation {
   NEW_TILE_NEIGHBORS,
+  VERTICAL_LINES,
+  HORIZONTAL_LINES,
+  ALL_TILES_FROM_COLOR
 }
 
 export interface NewPointsExplanation {

@@ -54,11 +54,11 @@ export const MosaicGame: GameConfig = {
         board.newPointsExplanation = [];
         placeTilesAndScore(G);
         if (isGameOver(G)) {
-          applyFinalScore();
+          applyFinalScore(G);
           const winner = `${getWinner(G)}`;
           ctx.events.endGame({ winner });
         } else {
-          drawMoreTiles();
+          drawMoreTiles(G, ctx);
         }
       }
     },

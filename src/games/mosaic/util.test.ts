@@ -13,6 +13,7 @@ import {
   isGameOver,
   getWinner,
   placeTilesAndScore,
+  drawMoreTiles,
 } from './util';
 import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType, PointsExplanation } from './definitions';
 import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
@@ -688,5 +689,48 @@ describe('placeTilesAndScore()', () => {
       },
     };
     expect(fakeG).toEqual(expected);
+  });
+});
+
+describe('drawMoreTiles()', () => {
+  it('should withdraw from primary bag', () => {
+    const fakeG: MosaicGameState = {
+      boards: [
+        { ...DEFAULT_BOARD },
+        { ...DEFAULT_BOARD },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {
+        red: 1,
+        blue: 2,
+        green: 10,
+      },
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [{ maxSize: 4 }, { maxSize: 4 }],
+    };
+
+    const fakeCtx = {
+      random: {
+        Shuffle: x => {
+          return x;
+        },
+      },
+    };
+
+    drawMoreTiles(fakeG, fakeCtx);
+
+    expect(fakeG.restrictedBuckets).toEqual([
+      {
+        maxSize: 4,
+        red: 1,
+        blue: 2,
+        green: 1,
+      },
+      {
+        maxSize: 4,
+        green: 4,
+      }
+    ]);
   });
 });

@@ -218,12 +218,16 @@ export function placeTilesAndScore(G: MosaicGameState) {
   }
 }
 
-export function applyFinalScore() {
-  // TODO(flamecoals): WIP
+/** Calculates and applies the final score. */
+export function applyFinalScore(G: MosaicGameState) {
+  
 }
 
-export function drawMoreTiles() {
-  // TODO(flamecoals): WIP
+/** Draws from bag tiles to all buckets to start a new round. */
+export function drawMoreTiles(G: MosaicGameState, ctx) {
+  for (const bucket of G.restrictedBuckets) {
+    withdrawFromBag(ctx, G.bag, G.secondaryBag, bucket);
+  }
 }
 
 /** Gets player index with highest score. */
