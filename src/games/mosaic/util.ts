@@ -333,3 +333,12 @@ export function isGameOver(G: MosaicGameState): boolean {
   }
   return false;
 }
+
+/** Alias for creating a move. bucket -1 is the center, and row -1 is the penalty. */
+export function makeMove(bucket: number, color: Color, row: number): MoveDetails {
+  const bucketType = bucket == -1 ? BucketType.CENTER : BucketType.RESTRICTED;
+  const rowType = row == -1 ? RowType.PENALTY : RowType.NORMAL;
+  const bucketIndex = bucketType == BucketType.RESTRICTED ? bucket : undefined;
+  const rowIndex = rowType == RowType.NORMAL ? row : undefined;
+  return { bucketType, bucketIndex, color, rowType, rowIndex };
+}
