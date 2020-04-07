@@ -1,4 +1,4 @@
-import { COLOR_ARRAY, PENALTY_ROW_SIZE } from './constants';
+import { COLOR_ARRAY, PENALTY_ROW_POINTS } from './constants';
 import {
   Bucket,
   Color,
@@ -87,7 +87,7 @@ export function getOriginBucketForMove(G: MosaicGameState, move: MoveDetails): B
 export function moveToPenaltyRow(G: MosaicGameState, board: Board, origin: Bucket, move: MoveDetails) {
   const currentLength = board.penaltyRow.length;
   const originCount = getColorCount(origin, move.color);
-  const discardedCount = Math.max(0, currentLength + originCount - PENALTY_ROW_SIZE);
+  const discardedCount = Math.max(0, currentLength + originCount - PENALTY_ROW_POINTS.length);
   const appliedCount = originCount - discardedCount;
   for (let i = 0; i < appliedCount; i++) {
     board.penaltyRow.push(move.color);
@@ -194,7 +194,9 @@ function getPlacedPiecePoints(board: Board, coord: Coord): number {
 }
 
 function addPointsExplanation(board: Board, explanation: NewPointsExplanation) {
-  board.newPointsExplanation = [explanation, ...(board.newPointsExplanation || [])];
+  if (explanation.points !== 0) {
+    board.newPointsExplanation = [...(board.newPointsExplanation || []), explanation];
+  }
 }
 
 /** Places tiles and updates score for that new tile. */
@@ -212,15 +214,92 @@ export function placeTilesAndScore(G: MosaicGameState) {
       }
     }
     board.points += points;
-    if (points) {
-      addPointsExplanation(board, { points, explanation: PointsExplanation.NEW_TILE_NEIGHBORS });
+    addPointsExplanation(board, { points, explanation: PointsExplanation.NEW_TILE_NEIGHBORS });
+  }
+}
+
+function getCompletedColumns(board: Board): number {
+  let result = 0;
+  for (let j = 0; j < 5; j++) {
+    if (countNeighbors(board, [0, j], [1, 0]) === 5) {
+      result += 1;
     }
+  }
+  return result;
+}
+
+function getCompletedRows(board: Board): number {
+  let result = 0;
+  for (let i = 0; i < 5; i++) {
+    if (countNeighbors(board, [i, 0], [0, 1]) === 5) {
+      result += 1;
+    }
+  }
+  return result;
+}
+
+function getCompletedColors(board: Board): number {
+  const colorCount: Bucket = {};
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+      const color = board.board[i][j];
+      colorCount[color] = (colorCount[color] || 0) + 1;
+    }
+  }
+  let result = 0;
+  for (const color of COLOR_ARRAY) {
+    if (colorCount[color] == 5) {
+      result += 1;
+    }
+  }
+  return result;
+}
+
+/** Process penalty and score. */
+export function processPenalty(G: MosaicGameState) {
+  for (const board of G.boards) {
+    let penalty = 0;
+    for (const [i, color] of board.penaltyRow.entries()) {
+      if (color == Color.NONE) {
+        continue;
+      }
+      penalty += PENALTY_ROW_POINTS[i];
+
+      if (color === Color.PENALTY) {
+        G.centerBucket.penalty = 1;
+      } else {
+        G.secondaryBag[color] = (G.secondaryBag[color] || 0) + 1;
+      }
+    }
+    board.penaltyRow = [];
+    addPointsExplanation(board, {
+      points: penalty,
+      explanation: PointsExplanation.PENALTY,
+    });
+    board.points += penalty;
   }
 }
 
 /** Calculates and applies the final score. */
 export function applyFinalScore(G: MosaicGameState) {
-  
+  for (const board of G.boards) {
+    const rowsPoints = getCompletedRows(board) * 2;
+    addPointsExplanation(board, {
+      points: rowsPoints,
+      explanation: PointsExplanation.COMPLETED_ROWS,
+    });
+    const colsPoints = getCompletedColumns(board) * 7;
+    addPointsExplanation(board, {
+      points: colsPoints,
+      explanation: PointsExplanation.COMPLETED_COLUMNS,
+    });
+    const colorsPoints = getCompletedColors(board) * 10;
+    addPointsExplanation(board, {
+      points: colorsPoints,
+      explanation: PointsExplanation.COMPLETED_COLORS,
+    });
+    board.points += colorsPoints + colsPoints + rowsPoints;
+  }
 }
 
 /** Draws from bag tiles to all buckets to start a new round. */

@@ -16,6 +16,7 @@ import {
   placeTilesAndScore,
   applyFinalScore,
   drawMoreTiles,
+  processPenalty,
 } from './util';
 
 export const MosaicGame: GameConfig = {
@@ -53,6 +54,7 @@ export const MosaicGame: GameConfig = {
       if (getAvailableTilesCount(G) === 0) {
         board.newPointsExplanation = [];
         placeTilesAndScore(G);
+        processPenalty(G);
         if (isGameOver(G)) {
           applyFinalScore(G);
           const winner = `${getWinner(G)}`;

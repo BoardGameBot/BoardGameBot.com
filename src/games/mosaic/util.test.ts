@@ -14,6 +14,8 @@ import {
   getWinner,
   placeTilesAndScore,
   drawMoreTiles,
+  processPenalty,
+  applyFinalScore,
 } from './util';
 import { Bucket, Color, MosaicGameState, MoveDetails, BucketType, RowType, PointsExplanation } from './definitions';
 import { DEFAULT_BOARD, DEFAULT_TEMPLATE } from './constants';
@@ -619,6 +621,52 @@ describe('getWinner()', () => {
   });
 });
 
+describe('processPenalty()', () => {
+  it('should place tiles and score correctly', () => {
+    const fakeG: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          points: 20,
+          penaltyRow: [Color.PENALTY, Color.RED, Color.GREEN],
+        },
+        { ...DEFAULT_BOARD },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [{}],
+    };
+
+    processPenalty(fakeG);
+
+    const expected: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          newPointsExplanation: [{ points: -4, explanation: PointsExplanation.PENALTY }],
+          points: 16, // - 4 points
+          penaltyRow: [],
+        },
+        {
+          ...DEFAULT_BOARD,
+          points: 0,
+        },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      centerBucket: { penalty: 1 },
+      restrictedBuckets: [{}],
+      secondaryBag: {
+        red: 1,
+        green: 1,
+      },
+    };
+    expect(fakeG).toEqual(expected);
+  });
+});
+
 describe('placeTilesAndScore()', () => {
   it('should place tiles and score correctly', () => {
     const fakeG: MosaicGameState = {
@@ -692,13 +740,65 @@ describe('placeTilesAndScore()', () => {
   });
 });
 
+describe('applyFinalScore()', () => {
+  it('score correctly', () => {
+    const board = [
+      // Initial two rows (+4), third column (+7) and blue color (+10) are complete.
+      [Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK, Color.GREEN],
+      [Color.GREEN, Color.BLUE, Color.YELLOW, Color.RED, Color.BLACK],
+      [Color.BLACK, Color.GREEN, Color.BLUE, Color.NONE, Color.NONE],
+      [Color.NONE, Color.NONE, Color.GREEN, Color.BLUE, Color.YELLOW],
+      [Color.NONE, Color.NONE, Color.BLACK, Color.NONE, Color.BLUE],
+    ];
+    const fakeG: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          points: 20,
+          board,
+        },
+        { ...DEFAULT_BOARD },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      secondaryBag: {},
+      centerBucket: {},
+      restrictedBuckets: [{}],
+    };
+
+    applyFinalScore(fakeG);
+
+    const expected: MosaicGameState = {
+      boards: [
+        {
+          ...DEFAULT_BOARD,
+          newPointsExplanation: [
+            { points: 4, explanation: PointsExplanation.COMPLETED_ROWS },
+            { points: 7, explanation: PointsExplanation.COMPLETED_COLUMNS },
+            { points: 10, explanation: PointsExplanation.COMPLETED_COLORS },
+          ],
+          points: 41, // + 21 points
+          board,
+        },
+        {
+          ...DEFAULT_BOARD,
+          points: 0,
+        },
+      ],
+      boardTemplate: DEFAULT_TEMPLATE,
+      bag: {},
+      centerBucket: {},
+      restrictedBuckets: [{}],
+      secondaryBag: {},
+    };
+    expect(fakeG).toEqual(expected);
+  });
+});
+
 describe('drawMoreTiles()', () => {
   it('should withdraw from primary bag', () => {
     const fakeG: MosaicGameState = {
-      boards: [
-        { ...DEFAULT_BOARD },
-        { ...DEFAULT_BOARD },
-      ],
+      boards: [{ ...DEFAULT_BOARD }, { ...DEFAULT_BOARD }],
       boardTemplate: DEFAULT_TEMPLATE,
       bag: {
         red: 1,
@@ -730,7 +830,7 @@ describe('drawMoreTiles()', () => {
       {
         maxSize: 4,
         green: 4,
-      }
+      },
     ]);
   });
 });

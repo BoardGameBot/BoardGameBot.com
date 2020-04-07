@@ -10,8 +10,6 @@ export const DEFAULT_TEMPLATE: BoardTemplate = {
   ],
 };
 
-export const PENALTY_ROW_SIZE = 7;
-
 export const DEFAULT_BOARD: Board = {
   rows: [{ maxSize: 1 }, { maxSize: 2 }, { maxSize: 3 }, { maxSize: 4 }, { maxSize: 5 }],
   board: [
@@ -34,3 +32,5 @@ export const DEFAULT_BAG: Bucket = {
 };
 
 export const COLOR_ARRAY = [Color.RED, Color.YELLOW, Color.BLACK, Color.BLUE, Color.GREEN];
+
+export const PENALTY_ROW_POINTS = [-1, -1, -2, -2, -2, -3, -3];
